@@ -558,8 +558,8 @@ function categorizeIncome(description = "") {
     if (t.includes("subsidy")) {
         return "Subsidy from other LGUs";
     }
-    if (t.includes("ira") || t.includes("nta released") || t.includes("internal revenue allotment")) {
-        return "Internal Revenue allotment (IRA)";
+    if (t.includes("nta") || t.includes("nta released") || t.includes("National Taxation Allocation")) {
+        return "National Taxation Allocation (NTA)";
     }
     return "Other Income";
 }

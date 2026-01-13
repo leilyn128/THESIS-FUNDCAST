@@ -45,11 +45,11 @@ function categorizeIncome(description = "") {
   }
 
   if (
-    t.includes("ira") ||
+    t.includes("nta") ||
     t.includes("nta released") ||
-    t.includes("internal revenue allotment")
+    t.includes("National Taxation Allocation")
   ) {
-    return "Internal Revenue allotment (IRA)";
+    return "National Taxation Allocation (NTA)";
   }
 
   return "Other Income";
