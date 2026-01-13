@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
+    {"offset": {"line": 43, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/ALDEGS09/thesis/app/api/forecast/route.js"],"sourcesContent":["export async function GET() {\r\n  const res = await fetch(\r\n    \"http://127.0.0.1:8000/forecast\"\r\n  );\r\n\r\n  const data = await res.json();\r\n  return Response.json(data);\r\n}\r\n"],"names":[],"mappings":";;;;AAAO,eAAe;IACpB,MAAM,MAAM,MAAM,MAChB;IAGF,MAAM,OAAO,MAAM,IAAI,IAAI;IAC3B,OAAO,SAAS,IAAI,CAAC;AACvB","debugId":null}}]
+}

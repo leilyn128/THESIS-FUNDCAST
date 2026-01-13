@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
+    {"offset": {"line": 43, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/ALDEGS09/thesis/app/api/retrain/route.js"],"sourcesContent":["export async function POST() {\r\n  const res = await fetch(\r\n    \"http://127.0.0.1:8000/forecast/prophet?periods=5\",\r\n    { method: \"POST\" }\r\n  );\r\n\r\n  const data = await res.json();\r\n  return Response.json(data);\r\n}\r\n"],"names":[],"mappings":";;;;AAAO,eAAe;IACpB,MAAM,MAAM,MAAM,MAChB,oDACA;QAAE,QAAQ;IAAO;IAGnB,MAAM,OAAO,MAAM,IAAI,IAAI;IAC3B,OAAO,SAAS,IAAI,CAAC;AACvB","debugId":null}}]
+}

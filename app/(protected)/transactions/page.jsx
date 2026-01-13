@@ -1,413 +1,515 @@
-"use client";
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { supabase } from "../../../lib/supabaseClient";
-import * as XLSX from "xlsx";
+"use client"
 
-export default function TransactionsPage() {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [exportLoading, setExportLoading] = useState(false);
-  const [message, setMessage] = useState("");
+import { useState, useEffect, useMemo } from "react";
+import { categorizeExpense } 
+from "../dashboard/components/expensePieChart";
 
-  const [formData, setFormData] = useState({
-    type: "Income",
-    category: "",
-    amount: "",
-    date: "",
-    remarks: "",
-  });
+import { supabase } from "../../../lib/supabaseClient"
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+} from "recharts";
 
-  const [editData, setEditData] = useState(null); // ✅ for editing
-  const [exportType, setExportType] = useState("both");
-  const [exportMonth, setExportMonth] = useState("all");
+import {
+  AlertCircle,
+  BarChart3,
+} from "lucide-react";
+// Hooks
+import useBudgetData from "./lib/useBudgetData"
+import useBreakdownData from "./lib/useBreakdownData"
+import ExpensePieChart from "../dashboard/components/expensePieChart";
 
-  // ✅ Fetch transactions
-  const fetchTransactions = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("transactions")
-      .select("*")
-      .order("date", { ascending: false });
-    if (error) console.error("❌ Error fetching:", error.message);
-    else setTransactions(data || []);
-    setLoading(false);
-  };
+// Components
+import SummaryCards from "./components/summaryCards"
+import ForecastChart from "./components/forecastChart"
+import ForecastSummary from "./components/forecastSummary"
+
+export default function TransactionPage() {
+  const [session, setSession] = useState(null)
+  const [forecastData, setForecastData] = useState([])
+  const nextYearForecast = useMemo(() => {
+  if (!forecastData || forecastData.length === 0) return 0;
+  return forecastData[0].value; // first forecasted year
+}, [forecastData]);
+
+  const [error, setError] = useState(null)
+
+  const { budgetData, loading, fetchBudgetData } = useBudgetData()
+  const { fetchBreakdownData } = useBreakdownData()
+  const forecastTransactions = forecastData; // or mapped forecast rows
+
+const [breakdown, setBreakdown] = useState([]);
 
   useEffect(() => {
-    fetchTransactions();
-  }, []);
+    if (budgetData.length > 0) loadForecast()
+  }, [budgetData])
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  // ✅ Add transaction
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newTransaction = { ...formData, amount: Number(formData.amount) };
-    const { error } = await supabase.from("transactions").insert([newTransaction]);
-    if (error) console.error("❌ Error inserting:", error.message);
-    else {
-      fetchTransactions();
-      setFormData({ type: "Income", category: "", amount: "", date: "", remarks: "" });
-    }
-  };
-
-  // ✅ Edit transaction
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    const { error } = await supabase
-      .from("transactions")
-      .update({
-        type: editData.type,
-        category: editData.category,
-        amount: Number(editData.amount),
-        date: editData.date,
-        remarks: editData.remarks,
-      })
-      .eq("id", editData.id);
-
-    if (error) setMessage("❌ Update failed: " + error.message);
-    else {
-      setMessage("✅ Transaction updated successfully!");
-      setEditData(null);
-      fetchTransactions();
-    }
-  };
-
-  // ✅ Delete transaction
- const handleDelete = async (id) => {
-  if (!id) {
-    console.error("❌ No ID provided for deletion");
-    setMessage("❌ Error: Missing transaction ID.");
-    return;
-  }
-
-  if (!confirm("Are you sure you want to delete this transaction?")) return;
-
+  async function loadForecast() {
   try {
-    const { error } = await supabase
+    setError(null)
+
+    const res = await fetch("/api/forecast", { cache: "no-store" })
+    if (!res.ok) throw new Error("Forecast failed")
+
+    const data = await res.json()
+
+    const lastYear = Math.max(...budgetData.map(d => d.year))
+
+    setForecastData(
+      data
+        .filter(d => d.year > lastYear)
+        .map(d => ({
+          year: d.year,
+          value: Number(d.prediction), // ✅ single locked value
+        }))
+    )
+  } catch {
+    setError("Failed to load forecast data.")
+  }
+}
+
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+      if (session) {
+        fetchBudgetData()
+        fetchBreakdownData()
+      }
+    })
+  }, [])
+
+
+  const nextYearForecastYear = useMemo(() => {
+  const currentYear = new Date().getFullYear();
+  return currentYear + 1;
+}, []);
+
+
+
+
+useEffect(() => {
+  const fetchHistoricalExpenses = async () => {
+    /* 2023–2024 from breakdown */
+    const { data: bd, error: bdError } = await supabase
+      .from("barangay_budget_breakdown")
+      .select("description, amount")
+      .eq("category", "Expenses")
+      .gte("year", 2023)
+      .lte("year", 2024);
+
+    if (bdError) {
+      console.error("Breakdown fetch error:", bdError);
+      return;
+    }
+
+    /* 2025 from transactions */
+    const { data: tx, error: txError } = await supabase
       .from("transactions")
-      .delete()
-      .eq("id", id);
+      .select("description, withdrawal")
+      .gte("date", "2025-01-01")
+      .lte("date", "2025-12-31");
 
-    if (error) throw error;
+    if (txError) {
+      console.error("Transaction fetch error:", txError);
+      return;
+    }
 
-    setTransactions((prev) => prev.filter((t) => t.id !== id));
-    setMessage("✅ Transaction deleted successfully!");
-  } catch (err) {
-    console.error("❌ Delete error:", err.message);
-    setMessage("❌ Failed to delete transaction: " + err.message);
-  }
-};
+    const breakdownExpenses = (bd || []).map(r => ({
+      description: r.description,
+      amount: Number(r.amount),
+    }));
 
- const handleExportExcel = async () => {
-  setExportLoading(true);
-  setMessage("");
+    const transactionExpenses = (tx || [])
+      .filter(t => t.withdrawal > 0)
+      .map(t => ({
+        description: t.description,
+        amount: Number(t.withdrawal),
+      }));
 
-  // 🧠 Use already-fetched local data
-  let data = [...transactions];
+    setBreakdown([
+      ...breakdownExpenses,
+      ...transactionExpenses,
+    ]);
+  };
 
-  if (!data.length) {
-    setMessage("⚠️ No transactions available to export.");
-    setExportLoading(false);
-    return;
-  }
+  fetchHistoricalExpenses();
 
-  // ✅ Filter by type
-  if (exportType !== "both") {
-    data = data.filter(
-      (t) => t.type === (exportType === "Income" ? "Income" : "Expense")
-    );
-  }
 
-  // ✅ Filter by month
-  if (exportMonth !== "all") {
-    data = data.filter((t) => {
-      if (!t.date) return false;
-      const month = new Date(t.date).getMonth() + 1;
-      return month === parseInt(exportMonth);
-    });
+}, []);
+const expenseSourceData = useMemo(() => {
+  const recommendationYear = Number(nextYearForecastYear);
+
+  // Use historical + actual expenses for 2026 onwards
+  if (recommendationYear >= 2026) {
+    return breakdown;
   }
 
-  if (!data.length) {
-    setMessage("⚠️ No records found for those filters.");
-    setExportLoading(false);
-    return;
-  }
-
-  // 💰 Format amounts
-  const formattedData = data.map((t) => ({
-    ...t,
-    amount: `₱${Number(t.amount).toLocaleString("en-PH", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`,
-  }));
-
-  // 📘 Export to Excel
-  const worksheet = XLSX.utils.json_to_sheet(formattedData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
-
-  const monthNames = [
-    "AllMonths",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const monthLabel =
-    exportMonth === "all" ? "AllMonths" : monthNames[parseInt(exportMonth)];
-  const typeLabel = exportType === "both" ? "All" : exportType;
-
-  const fileName = `transactions_${typeLabel}_${monthLabel}.xlsx`;
-  XLSX.writeFile(workbook, fileName);
-
-  setExportLoading(false);
-  setMessage(`✅ Exported ${data.length} records to ${fileName}`);
-};
+  return [];
+}, [nextYearForecastYear, breakdown]);
 
 
-  return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">Transactions</h2>
-      <p className="text-sm text-gray-500">
-        Record, manage, edit, and export barangay financial transactions.
-      </p>
 
-      {/* ✅ Add Transaction Form */}
-      <Card>
-        <CardContent className="p-4">
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 md:grid-cols-5 gap-4"
-          >
-            <select
-              name="type"
-              value={formData.type}
-              onChange={handleChange}
-              className="border p-2 rounded-lg"
-            >
-              <option value="Income">Income</option>
-              <option value="Expense">Expense</option>
-            </select>
-            <input
-              type="text"
-              name="category"
-              placeholder="Category"
-              value={formData.category}
-              onChange={handleChange}
-              className="border p-2 rounded-lg"
-              required
-            />
-            <input
-              type="number"
-              name="amount"
-              placeholder="Amount"
-              value={formData.amount}
-              onChange={handleChange}
-              className="border p-2 rounded-lg"
-              required
-            />
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              className="border p-2 rounded-lg"
-              required
-            />
-            <input
-              type="text"
-              name="remarks"
-              placeholder="Remarks"
-              value={formData.remarks}
-              onChange={handleChange}
-              className="border p-2 rounded-lg"
-            />
-            <button
-              type="submit"
-              className="md:col-span-5 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
-            >
-              Add Transaction
-            </button>
-          </form>
-        </CardContent>
-      </Card>
+const expenseStats = useMemo(() => {
+  const stats = {};
 
-      {/* ✅ Export Options */}
-      <Card>
-        <CardContent className="p-4 space-y-4">
-          <h3 className="text-lg font-semibold mb-2">Export Transactions</h3>
-          <div className="flex flex-wrap gap-4">
-            <select
-              value={exportType}
-              onChange={(e) => setExportType(e.target.value)}
-              className="border p-2 rounded-lg"
-            >
-              <option value="both">All (Income + Expenses)</option>
-              <option value="Income">Income</option>
-              <option value="Expense">Expenses</option>
-            </select>
-            <select
-              value={exportMonth}
-              onChange={(e) => setExportMonth(e.target.value)}
-              className="border p-2 rounded-lg"
-            >
-              <option value="all">All Months</option>
-              {[...Array(12)].map((_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {new Date(0, i).toLocaleString("default", { month: "long" })}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={handleExportExcel}
-              disabled={exportLoading}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
-            >
-              {exportLoading ? "Exporting..." : "Export to Excel"}
-            </button>
+  expenseSourceData.forEach(item => {
+    const category = categorizeExpense(item.description);
+    const subcategory = item.description;
+
+    if (!stats[category]) {
+      stats[category] = { total: 0, items: {} };
+    }
+
+    stats[category].total += item.amount;
+
+    stats[category].items[subcategory] =
+      (stats[category].items[subcategory] || 0) + item.amount;
+  });
+
+  return stats;
+}, [expenseSourceData]);
+
+
+const utilizationRatios = useMemo(() => {
+  const ratios = {};
+  const totalExpenses = Object.values(expenseStats)
+    .reduce((s, c) => s + c.total, 0);
+
+  if (totalExpenses === 0) return {};
+
+  Object.entries(expenseStats).forEach(([category, data]) => {
+    ratios[category] = data.total / totalExpenses;
+  });
+
+  return ratios;
+}, [expenseStats]);
+
+const suggestedAllocationData = useMemo(() => {
+  const total = Number(nextYearForecast);
+  if (!Number.isFinite(total) || total <= 0) return [];
+
+  return Object.entries(utilizationRatios).map(
+    ([category, ratio]) => ({
+      name: category,
+      percentage: +(ratio * 100).toFixed(2),
+      amount: total * ratio,
+      description: "Based on actual historical spending",
+    })
+  );
+}, [nextYearForecast, utilizationRatios]);
+
+const detailedExpenseBreakdown = useMemo(() => {
+  return Object.entries(expenseStats).map(
+    ([category, data]) => ({
+      category,
+      total: data.total,
+      items: Object.entries(data.items).map(
+        ([name, amount]) => ({
+          name,
+          amount,
+        })
+      ),
+    })
+  );
+}, [expenseStats]);
+console.log("Forecast value:", nextYearForecast);
+console.log("Utilization ratios:", utilizationRatios);
+console.log("Breakdown length:", breakdown.length);
+console.log("Expense source data:", expenseSourceData);
+console.log("Expense stats:", expenseStats);
+
+/* ---------------- UI ---------------- */
+return (
+  <div className="min-h-screen w-full bg-slate-50 overflow-x-hidden">
+  <div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8 py-6">
+
+
+      
+      {/* HEADER SECTION */}
+      <div className="mb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div className="px-8 py-6 bg-gradient-to-r from-emerald-700 to-emerald-600">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                    <span className="text-white text-lg">📈</span>
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-bold text-white tracking-tight">
+                      Forecasting Analysis
+                    </h1>
+                    
+                  </div>
+                </div>
+                
+              </div>
+              <div className="flex gap-3">
+                
+              </div>
+            </div>
           </div>
-          {message && <p className="text-sm text-gray-600">{message}</p>}
-        </CardContent>
-      </Card>
+          
+        
+        </div>
+      </div>
 
-      {/* ✅ Table with Edit/Delete */}
-      <Card>
-        <CardContent className="p-4">
-          <h3 className="text-lg font-semibold mb-4">Transaction Records</h3>
-          {loading ? (
-            <p>Loading...</p>
-          ) : transactions.length === 0 ? (
-            <p className="text-gray-500 italic">No transactions found.</p>
-          ) : (
-            <table className="min-w-full border border-gray-200 text-sm">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="border px-4 py-2 text-left">Date</th>
-                  <th className="border px-4 py-2 text-left">Type</th>
-                  <th className="border px-4 py-2 text-left">Category</th>
-                  <th className="border px-4 py-2 text-right">Amount (₱)</th>
-                  <th className="border px-4 py-2 text-left">Remarks</th>
-                  <th className="border px-4 py-2 text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions.map((t) =>
-                  editData?.id === t.id ? (
-                    <tr key={t.id} className="bg-yellow-50">
-                      <td className="border px-4 py-2">
-                        <input
-                          type="date"
-                          value={editData.date}
-                          onChange={(e) =>
-                            setEditData({ ...editData, date: e.target.value })
-                          }
-                          className="border p-1 rounded w-full"
-                        />
-                      </td>
-                      <td className="border px-4 py-2">
-                        <select
-                          value={editData.type}
-                          onChange={(e) =>
-                            setEditData({ ...editData, type: e.target.value })
-                          }
-                          className="border p-1 rounded w-full"
-                        >
-                          <option value="Income">Income</option>
-                          <option value="Expense">Expense</option>
-                        </select>
-                      </td>
-                      <td className="border px-4 py-2">
-                        <input
-                          type="text"
-                          value={editData.category}
-                          onChange={(e) =>
-                            setEditData({ ...editData, category: e.target.value })
-                          }
-                          className="border p-1 rounded w-full"
-                        />
-                      </td>
-                      <td className="border px-4 py-2 text-right">
-                        <input
-                          type="number"
-                          value={editData.amount}
-                          onChange={(e) =>
-                            setEditData({ ...editData, amount: e.target.value })
-                          }
-                          className="border p-1 rounded w-full text-right"
-                        />
-                      </td>
-                      <td className="border px-4 py-2">
-                        <input
-                          type="text"
-                          value={editData.remarks || ""}
-                          onChange={(e) =>
-                            setEditData({ ...editData, remarks: e.target.value })
-                          }
-                          className="border p-1 rounded w-full"
-                        />
-                      </td>
-                      <td className="border px-4 py-2 text-center space-x-2">
-                        <button
-                          onClick={handleEditSubmit}
-                          className="bg-green-600 text-white px-2 py-1 rounded"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => setEditData(null)}
-                          className="bg-gray-400 text-white px-2 py-1 rounded"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                    </tr>
-                  ) : (
-                    <tr key={t.id} className="hover:bg-gray-50">
-                      <td className="border px-4 py-2">{t.date}</td>
-                      <td className="border px-4 py-2">{t.type}</td>
-                      <td className="border px-4 py-2">{t.category}</td>
-                      <td className="border px-4 py-2 text-right">
-                        ₱
-                        {Number(t.amount).toLocaleString("en-PH", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </td>
-                      <td className="border px-4 py-2">{t.remarks}</td>
-                      <td className="border px-4 py-2 text-center space-x-2">
-                        <button
-                          onClick={() => setEditData(t)}
-                          className="bg-blue-500 text-white px-2 py-1 rounded"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(t.id)}
-                          className="bg-red-500 text-white px-2 py-1 rounded"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          )}
-        </CardContent>
-      </Card>
+      {/* ERROR STATE */}
+      {error && (
+        <div className="mb-6">
+          <div className="bg-white border border-red-200 rounded-lg shadow-sm">
+            <div className="px-6 py-4 flex items-start gap-3">
+              <div className="mt-0.5">
+                <AlertCircle className="text-red-500 h-5 w-5 flex-shrink-0" />
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-semibold text-red-800">Forecast Error</h4>
+                <p className="text-sm text-red-600 mt-1">{error}</p>
+              </div>
+              <button className="text-sm text-red-600 hover:text-red-800 font-medium">
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* LOADING STATE */}
+      {loading && (
+        <div className="mb-6">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div className="p-16 text-center">
+              <div className="inline-flex flex-col items-center">
+                <div className="animate-spin rounded-full h-10 w-10 border-3 border-slate-200 border-t-emerald-600 mb-4"></div>
+                <p className="text-slate-700 font-medium mb-2">Loading forecast analytics...</p>
+                <p className="text-sm text-slate-500">Processing historical data and generating insights</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MAIN CONTENT */}
+      {forecastData.length > 0 && (
+        <>
+          {/* CHARTS SECTION */}
+          <div className="mb-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              
+              {/* MAIN FORECAST CHART */}
+              <div className="xl:col-span-2">
+                <div className="bg-white rounded-xl border border-slate-200 shadow-sm h-full">
+                  <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-lg font-semibold text-slate-900">
+                        Budget Forecast Analysis
+                      </h2>
+                     
+                    </div>
+                    <div className="flex gap-2">
+                     
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="h-96">
+                      <ForecastChart
+                        historyData={budgetData}
+                        forecastData={forecastData}
+                      />
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+{/* RECOMMENDATIONS SECTION */}
+          <div className="mb-8">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+       
+
+
+             
+               
+              
+              
+       
+
+              
+
+                  {/* ALLOCATION VISUALIZATION */}
+                  <div className="lg:col-span-1">
+                    <div className="bg-gradient-to-b from-slate-50 to-white rounded-lg border border-slate-200 p-6 h-full">
+                      <h3 className="text-base font-semibold text-slate-900 mb-15">
+                        Proposed Allocation
+                      </h3>
+                      
+                      {/* PIE CHART */}
+                      <div className="mb-8">
+                        <ResponsiveContainer width="100%" height={220}>
+                          <PieChart>
+                            <Pie
+  data={suggestedAllocationData}
+  dataKey="amount"
+  nameKey="name"
+
+                              cx="50%"
+                              cy="50%"
+                              outerRadius={80}
+                              innerRadius={35}
+                              label={false}
+                              stroke="#ffffff"
+                              strokeWidth={3}
+                            >
+                              {suggestedAllocationData.map((_, index) => (
+                                <Cell
+                                  key={index}
+                                  fill={[
+                                    "#0ea5e9", // PS - sky blue
+                                    "#ef4444", // MOOE - red
+                                    "#f59e0b", // BDF - amber
+                                    "#6366f1", // BDRRM - indigo
+                                    "#8b5cf6", // SK - violet
+                                    "#64748b", // Other - slate
+                                  ][index]}
+                                />
+                              ))}
+                            </Pie>
+                            <Tooltip
+                              formatter={(value) => [`₱${Number(value).toLocaleString()}`, 'Allocation']}
+                              contentStyle={{
+                                backgroundColor: 'white',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '8px',
+                                padding: '12px',
+                                fontSize: '12px'
+                              }}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+
+                      {/* ALLOCATION DETAILS */}
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-slate-700 font-medium">Predicted Budget</span>
+                          <span className="text-slate-900 font-bold">
+₱{suggestedAllocationData
+  .reduce((sum, item) => sum + item.amount, 0)
+  .toLocaleString("en-PH", { minimumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          {suggestedAllocationData.map((item, index) => (
+                            <div key={item.name} className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-100">
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className="h-3 w-3 rounded-full flex-shrink-0"
+                                  style={{
+                                    backgroundColor: [
+                                      "#0ea5e9", "#ef4444", "#f59e0b", 
+                                      "#6366f1", "#8b5cf6", "#64748b"
+                                    ][index],
+                                  }}
+                                />
+                                <span className="text-sm font-medium text-slate-700">{item.name}</span>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm font-semibold text-slate-900">
+₱{Number(item.amount).toLocaleString("en-PH", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+})}
+                                </div>
+                                <div className="text-xs text-slate-500">
+{(
+  (item.amount /
+    suggestedAllocationData.reduce((sum, i) => sum + i.amount, 0)) *
+  100
+).toFixed(1)}%
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
+              
+            </div>
+          </div>
+
+          
+         
+     
+
+         
+        </>
+      )}
+
+      {/* EMPTY STATE */}
+      {!loading && budgetData.length === 0 && (
+        <div className="text-center py-16">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-12 max-w-2xl mx-auto">
+            <div className="mx-auto h-20 w-20 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mb-6">
+              <BarChart3 className="h-10 w-10 text-slate-500" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900 mb-3">
+              No Budget Data Available
+            </h3>
+            <p className="text-slate-600 mb-8 max-w-md mx-auto">
+              Upload historical budget data to generate AI-powered forecasts and strategic recommendations
+            </p>
+            <div className="flex gap-4 justify-center">
+              <button className="px-6 py-3 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200">
+                View Sample Report
+              </button>
+              <button className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg font-medium hover:from-emerald-700 hover:to-teal-700">
+                <span className="flex items-center gap-2">
+                  <span>📤</span>
+                  <span>Upload Budget Data</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </div>
+  </div>
+);
+
+/* ===== ENHANCED STAT CARD COMPONENT ===== */
+function StatCard({ title, value, icon, trend }) {
+  return (
+    <div className="group">
+      <div className="p-4 hover:bg-slate-50 rounded-lg transition-colors">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-600">
+            <span className="text-lg">{icon}</span>
+          </div>
+          <div className="flex-1">
+            <p className="text-sm text-slate-500 font-medium">{title}</p>
+            <p className="text-xl font-bold text-slate-900 mt-1">{value}</p>
+            {trend && (
+              <div className="flex items-center gap-2 mt-2">
+                <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                  trend.positive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+                }`}>
+                  {trend.positive ? '↑' : '↓'} {trend.value}
+                </span>
+                <span className="text-xs text-slate-500">vs last period</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+}}

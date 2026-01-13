@@ -31,11 +31,15 @@ function ProtectedLayoutContent(param) {
     const links = [
         {
             href: "/dashboard",
-            label: "Dashboard"
+            label: "Cash Flow"
+        },
+        {
+            href: "/transaction",
+            label: "Transactions"
         },
         {
             href: "/transactions",
-            label: "Transactions"
+            label: "Forecasting Page"
         },
         {
             href: "/reports",
@@ -89,12 +93,12 @@ function ProtectedLayoutContent(param) {
                 children: "Checking authentication..."
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                lineNumber: 61,
+                lineNumber: 63,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/thesis/app/(protected)/layout.jsx",
-            lineNumber: 60,
+            lineNumber: 62,
             columnNumber: 7
         }, this);
     }
@@ -115,7 +119,7 @@ function ProtectedLayoutContent(param) {
                                         className: "w-24 h-24 object-contain"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                                        lineNumber: 72,
+                                        lineNumber: 74,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -123,13 +127,13 @@ function ProtectedLayoutContent(param) {
                                         children: "FUNDCAST"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                                        lineNumber: 77,
+                                        lineNumber: 79,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                                lineNumber: 71,
+                                lineNumber: 73,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -143,18 +147,18 @@ function ProtectedLayoutContent(param) {
                                         ]
                                     }, link.href, true, {
                                         fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                                        lineNumber: 82,
+                                        lineNumber: 84,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                                lineNumber: 80,
+                                lineNumber: 82,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                        lineNumber: 70,
+                        lineNumber: 72,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -168,18 +172,18 @@ function ProtectedLayoutContent(param) {
                             children: "🚪 Logout"
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                            lineNumber: 100,
+                            lineNumber: 102,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                        lineNumber: 99,
+                        lineNumber: 101,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                lineNumber: 69,
+                lineNumber: 71,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -187,13 +191,13 @@ function ProtectedLayoutContent(param) {
                 children: children
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/layout.jsx",
-                lineNumber: 113,
+                lineNumber: 115,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/thesis/app/(protected)/layout.jsx",
-        lineNumber: 67,
+        lineNumber: 69,
         columnNumber: 5
     }, this);
 }

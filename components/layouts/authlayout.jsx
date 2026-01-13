@@ -4,7 +4,7 @@ export default function LoginLayout({ children }) {
       className=" items-center justify-center overflow-hidden "
       style={{
         backgroundImage:
-          "linear-gradient(to bottom right, rgba(22,163,74,0.9), rgba(220,38,38,0.8), rgba(250,204,21,0.7)), url('/logo.jpg')",
+          "linear-gradient(to bottom right, rgba(22,163,74,0.9), rgba(220,38,38,0.8), rgba(250,204,21,0.7)), url('C:\Users\ALDEGS09\thesis\public\logo.png')",
         backgroundSize: "cover, 250px",   // gradient covers screen, logo fixed size
         backgroundRepeat: "no-repeat, no-repeat",
         backgroundPosition: "center, center",

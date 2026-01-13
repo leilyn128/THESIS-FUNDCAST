@@ -67,8 +67,6 @@ __turbopack_context__.s([
     ()=>supabase
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$module$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/thesis/node_modules/@supabase/supabase-js/dist/module/index.js [app-ssr] (ecmascript) <locals>");
-console.log("SUPABASE URL:", ("TURBOPACK compile-time value", "https://ovvqzbsarnzfbdxnkikr.supabase.co"));
-console.log("SUPABASE KEY:", ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92dnF6YnNhcm56ZmJkeG5raWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzNzUxMTUsImV4cCI6MjA3Mzk1MTExNX0.b3NVVtIzpRiyaPN9-G-dpdhUwpiesiv8fS6rs86UBbM")?.slice(0, 10)); // only show first 10 chars
 ;
 const supabaseUrl = ("TURBOPACK compile-time value", "https://ovvqzbsarnzfbdxnkikr.supabase.co");
 const supabaseAnonKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92dnF6YnNhcm56ZmJkeG5raWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzNzUxMTUsImV4cCI6MjA3Mzk1MTExNX0.b3NVVtIzpRiyaPN9-G-dpdhUwpiesiv8fS6rs86UBbM");

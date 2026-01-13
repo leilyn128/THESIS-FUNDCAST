@@ -9,11 +9,9 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/lib/supabaseClient.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/node_modules/xlsx/xlsx.mjs [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
-;
 ;
 ;
 function SettingsPage() {
@@ -23,9 +21,7 @@ function SettingsPage() {
     const [confirmPassword, setConfirmPassword] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [message, setMessage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [previewData, setPreviewData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]) // 👈 for displaying uploaded file contents
-    ;
-    // ✅ Change password
+    const [userEmail, setUserEmail] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const handleChangePassword = async (e)=>{
         e.preventDefault();
         setMessage("");
@@ -33,350 +29,544 @@ function SettingsPage() {
             setMessage("❌ New passwords do not match.");
             return;
         }
-        const { data: { user }, error: userError } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].auth.getUser();
-        if (userError || !user) {
-            setMessage("⚠️ User not found. Please log in again.");
+        if (newPassword.length < 8) {
+            setMessage("❌ Password must be at least 8 characters.");
             return;
         }
-        const { error: signInError } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].auth.signInWithPassword({
-            email: user.email,
-            password: oldPassword
-        });
-        if (signInError) {
-            setMessage("❌ Old password is incorrect.");
-            return;
-        }
-        const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].auth.updateUser({
-            password: newPassword
-        });
-        if (error) setMessage("❌ " + error.message);
-        else setMessage("✅ Password updated successfully!");
-        setOldPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-    };
-    // ✅ Export data as CSV
-    // ✅ Export data as Excel (.xlsx)
-    const handleExportExcel = async ()=>{
         setLoading(true);
-        setMessage("");
-        const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("transactions").select("*");
-        setLoading(false);
-        if (error) {
-            setMessage("❌ Failed to export data: " + error.message);
-            return;
-        }
-        if (!data || data.length === 0) {
-            setMessage("⚠️ No data available to export.");
-            return;
-        }
-        // ✅ Format amount to show ₱ and two decimal places
-        const formattedData = data.map((t)=>({
-                Date: t.date,
-                Type: t.type,
-                Category: t.category,
-                Amount: "₱ ".concat(Number(t.amount).toLocaleString("en-PH", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                })),
-                Remarks: t.remarks || ""
-            }));
-        // ✅ Create Excel sheet
-        const worksheet = __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["utils"].json_to_sheet(formattedData);
-        const workbook = __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["utils"].book_new();
-        __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["utils"].book_append_sheet(workbook, worksheet, "Transactions");
-        // ✅ Generate filename like "transactions_2025-10-22.xlsx"
-        const today = new Date().toISOString().split("T")[0];
-        const filename = "transactions_".concat(today, ".xlsx");
-        // ✅ Save Excel file
-        __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["writeFile"](workbook, filename);
-        setMessage("✅ Transactions exported to Excel successfully!");
-    };
-    const handleImportExcel = async (e)=>{
-        const file = e.target.files[0];
-        if (!file) return;
-        const fileExt = file.name.split(".").pop();
-        const timestamp = Date.now();
-        const storageFileName = "import_".concat(timestamp, "_").concat(file.name) // unique storage name
-        ;
-        setLoading(true);
-        setMessage("Uploading file...");
-        // Step 1️⃣ Upload to Supabase Storage
-        const { error: uploadError } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.from("imports").upload(storageFileName, file, {
-            upsert: false
-        }) // do NOT overwrite
-        ;
-        if (uploadError) {
-            setMessage("❌ Upload failed: " + uploadError.message);
-            setLoading(false);
-            return;
-        }
-        // Step 2️⃣ Get public URL
-        const { data: publicData } = __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.from("imports").getPublicUrl(storageFileName);
-        const fileUrl = publicData.publicUrl;
-        // Step 3️⃣ Parse Excel file
         try {
-            var _file_name_match;
-            const response = await fetch(fileUrl);
-            const arrayBuffer = await response.arrayBuffer();
-            const workbook = __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["read"](arrayBuffer, {
-                type: "array"
+            const { data: { user } } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].auth.getUser();
+            if (!(user === null || user === void 0 ? void 0 : user.email)) throw new Error("User not found.");
+            // Re-authenticate
+            const { error: signInError } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].auth.signInWithPassword({
+                email: user.email,
+                password: oldPassword
             });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const jsonData = __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["utils"].sheet_to_json(sheet);
-            // Step 4️⃣ Normalize data
-            const normalizedData = jsonData.map((row)=>({
-                    account_name: row["Account Name"] || row["account_name"] || "",
-                    debit: row["Debit"] || row["debit"] || 0,
-                    credit: row["Credit"] || row["credit"] || 0
-                }));
-            setPreviewData(normalizedData);
-            setMessage("✅ File uploaded successfully!");
-            // Step 5️⃣ Determine Year
-            const detectedYear = ((_file_name_match = file.name.match(/20\d{2}/)) === null || _file_name_match === void 0 ? void 0 : _file_name_match[0]) || new Date().getFullYear();
-            // Step 6️⃣ Insert into trial_balance
-            const formattedData = normalizedData.map((row)=>({
-                    ...row,
-                    year: detectedYear
-                }));
-            const { error: insertError } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("trial_balance").insert(formattedData);
-            if (insertError) {
-                console.error(insertError);
-                setMessage("❌ Failed to insert into trial_balance: " + insertError.message);
-            } else {
-                setMessage("✅ Imported ".concat(formattedData.length, " rows into trial_balance (").concat(detectedYear, ")"));
-            }
+            if (signInError) throw new Error("Current password is incorrect.");
+            // Update password
+            const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].auth.updateUser({
+                password: newPassword
+            });
+            if (error) throw error;
+            setMessage("✅ Password updated successfully.");
+            setOldPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
         } catch (err) {
-            console.error(err);
-            setMessage("❌ Failed to read Excel file.");
+            setMessage("❌ " + err.message);
+        } finally{
+            setLoading(false);
         }
-        setLoading(false);
     };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SettingsPage.useEffect": ()=>{
+            const fetchUser = {
+                "SettingsPage.useEffect.fetchUser": async ()=>{
+                    var _data_user;
+                    const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].auth.getUser();
+                    if (data === null || data === void 0 ? void 0 : (_data_user = data.user) === null || _data_user === void 0 ? void 0 : _data_user.email) {
+                        setUserEmail(data.user.email);
+                    }
+                }
+            }["SettingsPage.useEffect.fetchUser"];
+            fetchUser();
+        }
+    }["SettingsPage.useEffect"], []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "p-6 space-y-6 ",
+        className: "p-6",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                className: "text-3xl font-bold mb-8 text-green-700",
-                children: "⚙️ Settings"
-            }, void 0, false, {
-                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                lineNumber: 167,
-                columnNumber: 7
-            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "grid grid-cols-1 md:grid-cols-2 gap-6",
+                className: "w-full rounded-xl bg-gradient-to-r from-emerald-900 to-emerald-700 px-8 py-6 mb-8 flex items-center gap-3",
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "bg-white p-6 rounded-2xl shadow",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                className: "text-xl font-semibold mb-4",
-                                children: "👤 Account Settings"
-                            }, void 0, false, {
-                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                lineNumber: 172,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
-                                onSubmit: handleChangePassword,
-                                className: "space-y-4",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                className: "block text-sm mb-2 font-medium",
-                                                children: "Old Password"
-                                            }, void 0, false, {
-                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                                lineNumber: 176,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "password",
-                                                value: oldPassword,
-                                                onChange: (e)=>setOldPassword(e.target.value),
-                                                required: true,
-                                                className: "w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-400"
-                                            }, void 0, false, {
-                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                                lineNumber: 177,
-                                                columnNumber: 15
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                        lineNumber: 175,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                className: "block text-sm mb-2 font-medium",
-                                                children: "New Password"
-                                            }, void 0, false, {
-                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                                lineNumber: 187,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "password",
-                                                value: newPassword,
-                                                onChange: (e)=>setNewPassword(e.target.value),
-                                                required: true,
-                                                className: "w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-400"
-                                            }, void 0, false, {
-                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                                lineNumber: 188,
-                                                columnNumber: 15
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                        lineNumber: 186,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                className: "block text-sm mb-2 font-medium",
-                                                children: "Confirm New Password"
-                                            }, void 0, false, {
-                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                                lineNumber: 198,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "password",
-                                                value: confirmPassword,
-                                                onChange: (e)=>setConfirmPassword(e.target.value),
-                                                required: true,
-                                                className: "w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-400"
-                                            }, void 0, false, {
-                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                                lineNumber: 199,
-                                                columnNumber: 15
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                        lineNumber: 197,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        type: "submit",
-                                        disabled: loading,
-                                        className: "bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50",
-                                        children: loading ? "Processing..." : "Change Password"
-                                    }, void 0, false, {
-                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                        lineNumber: 208,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                lineNumber: 174,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-white text-xl",
+                        children: "⚙️"
+                    }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                        lineNumber: 171,
+                        lineNumber: 79,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "bg-white p-6 rounded-2xl shadow",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                className: "text-xl font-semibold mb-4",
-                                children: "📂 Data Management"
-                            }, void 0, false, {
-                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                lineNumber: 220,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "space-y-4",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: handleExportExcel,
-                                        disabled: loading,
-                                        className: "w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition disabled:opacity-50",
-                                        children: loading ? "Exporting..." : "📤 Export Transactions (Excel)"
-                                    }, void 0, false, {
-                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                        lineNumber: 223,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "w-full block",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "bg-yellow-500 text-white py-2 text-center rounded-lg hover:bg-yellow-600 transition cursor-pointer",
-                                                children: "📥 Import Data (Excel)"
-                                            }, void 0, false, {
-                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                                lineNumber: 233,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "file",
-                                                accept: ".xlsx,.csv",
-                                                onChange: handleImportExcel,
-                                                className: "hidden"
-                                            }, void 0, false, {
-                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                                lineNumber: 236,
-                                                columnNumber: 15
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                        lineNumber: 232,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                lineNumber: 222,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-xs text-gray-500 mt-3",
-                                children: 'Files are uploaded to your Supabase "imports" storage bucket.'
-                            }, void 0, false, {
-                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                                lineNumber: 245,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        className: "text-xl font-semibold text-white",
+                        children: "Account Settings"
+                    }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                        lineNumber: 219,
+                        lineNumber: 80,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                lineNumber: 169,
+                lineNumber: 78,
                 columnNumber: 7
             }, this),
-            message && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "mt-6 text-sm ".concat(message.startsWith("✅") ? "text-green-600" : message.startsWith("⚠️") ? "text-yellow-600" : "text-red-600"),
-                children: message
-            }, void 0, false, {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "max-w-6xl mx-auto",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "grid grid-cols-1 lg:grid-cols-2 gap-8",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-800 border border-emerald-600 shadow-sm p-7",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center justify-between mb-8",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                        className: "text-lg font-semibold text-white",
+                                                        children: "Account Information"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 94,
+                                                        columnNumber: 11
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-slate-100 text-sm mt-1",
+                                                        children: "Your personal and role details"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 99,
+                                                        columnNumber: 11
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 93,
+                                                columnNumber: 9
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                    className: "w-5 h-5 text-emerald-600",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    viewBox: "0 0 24 24",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round",
+                                                        strokeWidth: 2,
+                                                        d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 103,
+                                                        columnNumber: 13
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                    lineNumber: 102,
+                                                    columnNumber: 11
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 101,
+                                                columnNumber: 9
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                        lineNumber: 92,
+                                        columnNumber: 3
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "space-y-6",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-slate-200 mb-1 font-medium",
+                                                        children: "Email"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 110,
+                                                        columnNumber: 11
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "relative",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                readOnly: true,
+                                                                value: userEmail,
+                                                                className: "w-full rounded-lg bg-white/90 border border-white/30   px-4 py-2 text-slate-900"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                lineNumber: 115,
+                                                                columnNumber: 13
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "absolute right-3 top-1/2 transform -translate-y-1/2",
+                                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                                    className: "w-5 h-5 text-gray-400",
+                                                                    fill: "none",
+                                                                    stroke: "currentColor",
+                                                                    viewBox: "0 0 24 24",
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                                        strokeLinecap: "round",
+                                                                        strokeLinejoin: "round",
+                                                                        strokeWidth: 2,
+                                                                        d: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                        lineNumber: 124,
+                                                                        columnNumber: 17
+                                                                    }, this)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                    lineNumber: 123,
+                                                                    columnNumber: 15
+                                                                }, this)
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                lineNumber: 122,
+                                                                columnNumber: 13
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 114,
+                                                        columnNumber: 11
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 109,
+                                                columnNumber: 9
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "grid grid-cols-1 md:grid-cols-2 gap-6",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                            className: "block text-slate-200 mb-1 font-medium",
+                                                            children: "Role"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                            lineNumber: 132,
+                                                            columnNumber: 11
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-gray-900",
+                                                                children: "Barangay Treasurer"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                lineNumber: 136,
+                                                                columnNumber: 15
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                            lineNumber: 135,
+                                                            columnNumber: 13
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                    lineNumber: 131,
+                                                    columnNumber: 11
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 130,
+                                                columnNumber: 9
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-slate-200 mb-1 font-medium",
+                                                        children: "Barangay"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 143,
+                                                        columnNumber: 11
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "relative",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                readOnly: true,
+                                                                value: "Barangay Danahao, Clarin, Bohol",
+                                                                className: "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-gray-900 cursor-default"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                lineNumber: 147,
+                                                                columnNumber: 13
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "absolute right-3 top-1/2 transform -translate-y-1/2",
+                                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                                    className: "w-5 h-5 text-gray-400",
+                                                                    fill: "none",
+                                                                    stroke: "currentColor",
+                                                                    viewBox: "0 0 24 24",
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                                            strokeLinecap: "round",
+                                                                            strokeLinejoin: "round",
+                                                                            strokeWidth: 2,
+                                                                            d: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                            lineNumber: 154,
+                                                                            columnNumber: 17
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                                            strokeLinecap: "round",
+                                                                            strokeLinejoin: "round",
+                                                                            strokeWidth: 2,
+                                                                            d: "M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                            lineNumber: 155,
+                                                                            columnNumber: 17
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                    lineNumber: 153,
+                                                                    columnNumber: 15
+                                                                }, this)
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                                lineNumber: 152,
+                                                                columnNumber: 13
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 146,
+                                                        columnNumber: 11
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 142,
+                                                columnNumber: 9
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                        lineNumber: 108,
+                                        columnNumber: 7
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                lineNumber: 91,
+                                columnNumber: 5
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "bg-white rounded-2xl border border-slate-200 shadow-sm p-7",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center justify-between mb-8",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                        className: "text-xl font-semibold text-slate-900",
+                                                        children: "Change Password"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 167,
+                                                        columnNumber: 7
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-slate-500 text-sm mt-1",
+                                                        children: "Update your password for enhanced security"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 170,
+                                                        columnNumber: 7
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 166,
+                                                columnNumber: 5
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                    className: "w-5 h-5 text-emerald-600",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    viewBox: "0 0 24 24",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round",
+                                                        strokeWidth: 2,
+                                                        d: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 182,
+                                                        columnNumber: 9
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                    lineNumber: 176,
+                                                    columnNumber: 7
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 175,
+                                                columnNumber: 5
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                        lineNumber: 165,
+                                        columnNumber: 3
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                                        onSubmit: handleChangePassword,
+                                        className: "space-y-6",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-lgfont-medium text-slate-700 mb-2",
+                                                        children: "Current Password"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 195,
+                                                        columnNumber: 7
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "password",
+                                                        value: oldPassword,
+                                                        onChange: (e)=>setOldPassword(e.target.value),
+                                                        required: true,
+                                                        className: "w-full rounded-xl border border-slate-300 px-4 py-3.5   text-slate-900 bg-white   focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500   transition",
+                                                        placeholder: "Enter current password"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 198,
+                                                        columnNumber: 7
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 194,
+                                                columnNumber: 5
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-2",
+                                                        children: "New Password"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 213,
+                                                        columnNumber: 7
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "password",
+                                                        value: newPassword,
+                                                        onChange: (e)=>setNewPassword(e.target.value),
+                                                        required: true,
+                                                        className: "w-full rounded-xl border border-slate-300 px-4 py-3.5   text-slate-900 bg-white   focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500   transition",
+                                                        placeholder: "Enter new password"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 216,
+                                                        columnNumber: 7
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 212,
+                                                columnNumber: 5
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-2",
+                                                        children: "Confirm New Password"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 231,
+                                                        columnNumber: 7
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "password",
+                                                        value: confirmPassword,
+                                                        onChange: (e)=>setConfirmPassword(e.target.value),
+                                                        required: true,
+                                                        className: "w-full rounded-xl border border-slate-300 px-4 py-3.5   text-slate-900 bg-white   focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500   transition",
+                                                        placeholder: "Confirm new password"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                        lineNumber: 234,
+                                                        columnNumber: 7
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 230,
+                                                columnNumber: 5
+                                            }, this),
+                                            message && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "p-4 rounded-xl border ".concat(message.startsWith("✅") ? "bg-emerald-50 border-emerald-200 text-emerald-800" : "bg-red-50 border-red-200 text-red-800"),
+                                                children: message
+                                            }, void 0, false, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 249,
+                                                columnNumber: 7
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "submit",
+                                                disabled: loading,
+                                                className: "w-full rounded-xl bg-emerald-600 px-6 py-3.5   text-white font-medium   hover:bg-emerald-700   focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2   transition disabled:opacity-50",
+                                                children: loading ? "Updating..." : "Update Password"
+                                            }, void 0, false, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 261,
+                                                columnNumber: 5
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-sm text-slate-500 border-t border-slate-200 pt-5",
+                                                children: "Use at least 8 characters with a mix of letters, numbers, and symbols."
+                                            }, void 0, false, {
+                                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                                lineNumber: 274,
+                                                columnNumber: 5
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                        lineNumber: 192,
+                                        columnNumber: 3
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                                lineNumber: 164,
+                                columnNumber: 4
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
+                        lineNumber: 89,
+                        columnNumber: 3
+                    }, this),
+                    " "
+                ]
+            }, void 0, true, {
                 fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-                lineNumber: 252,
-                columnNumber: 9
-            }, this)
+                lineNumber: 86,
+                columnNumber: 1
+            }, this),
+            " "
         ]
     }, void 0, true, {
         fileName: "[project]/thesis/app/(protected)/settings/page.jsx",
-        lineNumber: 166,
+        lineNumber: 76,
         columnNumber: 5
     }, this);
 }
-_s(SettingsPage, "eEtl80FIRNMawD3MoLgn3HMmXWM=");
+_s(SettingsPage, "PGlvDYDaw5Y86BZlfdwfXRexmoQ=");
 _c = SettingsPage;
 var _c;
 __turbopack_context__.k.register(_c, "SettingsPage");

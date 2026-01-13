@@ -9,6 +9,11 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/lib/supabaseClient.js [app-ssr] (ecmascript)");
+(()=>{
+    const e = new Error("Cannot find module './components/PieChart.jsx'");
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+})();
 "use client";
 ;
 ;
@@ -18,13 +23,12 @@ function ReportsPage() {
     const [files, setFiles] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [selectedFile, setSelectedFile] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [trialBalance, setTrialBalance] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [breakdown, setBreakdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]) // ✅ new barangay_budget_breakdown
-    ;
+    const [breakdown, setBreakdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [message, setMessage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [selectedYear, setSelectedYear] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("all");
     const [selectedCategory, setSelectedCategory] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("all");
-    // ✅ Fetch imported files
+    // Fetch imported files
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const fetchFiles = async ()=>{
             const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].storage.from("imports").list("", {
@@ -49,7 +53,7 @@ function ReportsPage() {
         fetchFiles();
         fetchBreakdown();
     }, []);
-    // ✅ Fetch barangay_budget_breakdown from Supabase
+    // Fetch barangay_budget_breakdown from Supabase
     const fetchBreakdown = async ()=>{
         setLoading(true);
         const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from("barangay_budget_breakdown").select("*").order("year", {
@@ -61,19 +65,39 @@ function ReportsPage() {
             setLoading(false);
             return;
         }
-        setBreakdown(data || []);
+        if (data && data.length > 0) {
+            let runningBalance = 0;
+            const recalculated = data.map((t)=>{
+                runningBalance = runningBalance + (t.deposit || 0) - (t.withdrawal || 0);
+                return {
+                    ...t,
+                    balance: runningBalance
+                };
+            });
+            setBreakdown(recalculated);
+        } else {
+            setBreakdown([]);
+        }
         setLoading(false);
     };
-    // ✅ Get filtered data
+    // Get filtered data
     const filteredData = breakdown.filter((row)=>{
         const matchYear = selectedYear === "all" || row.year === Number(selectedYear);
         const matchCategory = selectedCategory === "all" || row.category === selectedCategory;
         return matchYear && matchCategory;
     });
-    // ✅ Extract unique years and categories
+    // Extract unique years and categories
     const years = Array.from(new Set(breakdown.map((b)=>b.year))).sort((a, b)=>b - a);
     const categories = Array.from(new Set(breakdown.map((b)=>b.category)));
     const totalAmount = filteredData.reduce((sum, r)=>sum + Number(r.amount || 0), 0);
+    // Prepare data for Pie chart
+    const pieChartData = categories.map((category)=>{
+        const categoryAmount = filteredData.filter((row)=>row.category === category).reduce((sum, row)=>sum + Number(row.amount || 0), 0);
+        return {
+            category,
+            amount: categoryAmount
+        };
+    });
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-6 space-y-8",
         children: [
@@ -82,7 +106,53 @@ function ReportsPage() {
                 children: "📊 Reports"
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                lineNumber: 76,
+                lineNumber: 93,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-white p-6 rounded-lg shadow space-y-4",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                        className: "text-lg font-semibold text-gray-800",
+                        children: "📂 Imported Files"
+                    }, void 0, false, {
+                        fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
+                        lineNumber: 97,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "overflow-x-auto border rounded-lg",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                            children: files.map((file)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                    className: "py-2",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                        href: "#",
+                                        className: "text-blue-600",
+                                        children: file.displayName
+                                    }, void 0, false, {
+                                        fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
+                                        lineNumber: 102,
+                                        columnNumber: 17
+                                    }, this)
+                                }, file.storageName, false, {
+                                    fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
+                                    lineNumber: 101,
+                                    columnNumber: 15
+                                }, this))
+                        }, void 0, false, {
+                            fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
+                            lineNumber: 99,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
+                        lineNumber: 98,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
+                lineNumber: 96,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -93,7 +163,7 @@ function ReportsPage() {
                         children: "🏛 Barangay Budget Breakdown"
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                        lineNumber: 82,
+                        lineNumber: 111,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -106,7 +176,7 @@ function ReportsPage() {
                                         children: "Year:"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                        lineNumber: 86,
+                                        lineNumber: 115,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -119,7 +189,7 @@ function ReportsPage() {
                                                 children: "All"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                lineNumber: 92,
+                                                lineNumber: 121,
                                                 columnNumber: 15
                                             }, this),
                                             years.map((y)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -127,19 +197,19 @@ function ReportsPage() {
                                                     children: y
                                                 }, y, false, {
                                                     fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                    lineNumber: 94,
+                                                    lineNumber: 123,
                                                     columnNumber: 17
                                                 }, this))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                        lineNumber: 87,
+                                        lineNumber: 116,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                lineNumber: 85,
+                                lineNumber: 114,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -149,7 +219,7 @@ function ReportsPage() {
                                         children: "Category:"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                        lineNumber: 102,
+                                        lineNumber: 131,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -162,7 +232,7 @@ function ReportsPage() {
                                                 children: "All"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                lineNumber: 108,
+                                                lineNumber: 137,
                                                 columnNumber: 15
                                             }, this),
                                             categories.map((c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -170,39 +240,39 @@ function ReportsPage() {
                                                     children: c
                                                 }, c, false, {
                                                     fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                    lineNumber: 110,
+                                                    lineNumber: 139,
                                                     columnNumber: 17
                                                 }, this))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                        lineNumber: 103,
+                                        lineNumber: 132,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                lineNumber: 101,
+                                lineNumber: 130,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                        lineNumber: 84,
+                        lineNumber: 113,
                         columnNumber: 9
                     }, this),
                     loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         children: "Loading..."
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                        lineNumber: 119,
+                        lineNumber: 148,
                         columnNumber: 11
                     }, this) : filteredData.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-gray-500 italic",
                         children: "No data available for selected filters."
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                        lineNumber: 121,
+                        lineNumber: 150,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "overflow-x-auto border rounded-lg mt-4",
@@ -218,7 +288,7 @@ function ReportsPage() {
                                                 children: "Year"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                lineNumber: 127,
+                                                lineNumber: 156,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -226,7 +296,7 @@ function ReportsPage() {
                                                 children: "Category"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                lineNumber: 128,
+                                                lineNumber: 157,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -234,7 +304,7 @@ function ReportsPage() {
                                                 children: "Subcategory"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                lineNumber: 129,
+                                                lineNumber: 158,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -242,7 +312,7 @@ function ReportsPage() {
                                                 children: "Description"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                lineNumber: 130,
+                                                lineNumber: 159,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -250,18 +320,18 @@ function ReportsPage() {
                                                 children: "Amount (₱)"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                lineNumber: 131,
+                                                lineNumber: 160,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                        lineNumber: 126,
+                                        lineNumber: 155,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                    lineNumber: 125,
+                                    lineNumber: 154,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -274,7 +344,7 @@ function ReportsPage() {
                                                         children: row.year
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                        lineNumber: 137,
+                                                        lineNumber: 166,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -282,7 +352,7 @@ function ReportsPage() {
                                                         children: row.category
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                        lineNumber: 138,
+                                                        lineNumber: 167,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -290,7 +360,7 @@ function ReportsPage() {
                                                         children: row.subcategory
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                        lineNumber: 139,
+                                                        lineNumber: 168,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -298,7 +368,7 @@ function ReportsPage() {
                                                         children: row.description
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                        lineNumber: 140,
+                                                        lineNumber: 169,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -312,13 +382,13 @@ function ReportsPage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                        lineNumber: 141,
+                                                        lineNumber: 170,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, row.id, true, {
                                                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                lineNumber: 136,
+                                                lineNumber: 165,
                                                 columnNumber: 19
                                             }, this)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
@@ -330,7 +400,7 @@ function ReportsPage() {
                                                     children: "TOTAL:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                    lineNumber: 151,
+                                                    lineNumber: 180,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -344,42 +414,49 @@ function ReportsPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                                    lineNumber: 154,
+                                                    lineNumber: 183,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                            lineNumber: 150,
+                                            lineNumber: 179,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                                    lineNumber: 134,
+                                    lineNumber: 163,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                            lineNumber: 124,
+                            lineNumber: 153,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                        lineNumber: 123,
+                        lineNumber: 152,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-                lineNumber: 81,
+                lineNumber: 110,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(PieChartComponent, {
+                data: pieChartData
+            }, void 0, false, {
+                fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
+                lineNumber: 198,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/thesis/app/(protected)/reports/page.jsx",
-        lineNumber: 75,
+        lineNumber: 92,
         columnNumber: 5
     }, this);
 }
