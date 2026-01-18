@@ -388,77 +388,72 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
         };
     };
     const growthMetrics = getGrowthMetrics();
+    const forecastGrowthRate = (()=>{
+        if (!growthMetrics || forecastMapped.length === 0) return null;
+        const lastForecast = forecastMapped[forecastMapped.length - 1]?.forecastBudget;
+        if (!lastForecast || !growthMetrics.lastActual) return null;
+        return ((lastForecast - growthMetrics.lastActual) / growthMetrics.lastActual * 100).toFixed(2);
+    })();
     // ---------- CUSTOM TOOLTIP ----------
     const CustomTooltip = ({ active, payload, label })=>{
         if (active && payload && payload.length) {
             const isForecast = label > lastActualYear;
             const actual = payload.find((p)=>p.dataKey === 'actualBudget')?.value;
             const forecast = payload.find((p)=>p.dataKey === 'forecastBudget')?.value;
+            const growthFromLastActual = isForecast && growthMetrics?.lastActual && forecast ? (forecast - growthMetrics.lastActual) / growthMetrics.lastActual * 100 : null;
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "bg-white p-4 border border-gray-200 shadow-lg rounded-lg",
+                className: "bg-white p-3 border rounded shadow text-sm",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "font-semibold text-gray-800 mb-2"
-                    }, void 0, false, {
-                        fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                        lineNumber: 83,
-                        columnNumber: 11
-                    }, this),
-                    actual && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-blue-600 mb-1",
+                        className: "font-semibold",
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "font-medium",
-                                children: "Actual Budget: "
-                            }, void 0, false, {
-                                fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                lineNumber: 87,
-                                columnNumber: 15
-                            }, this),
-                            "₱",
-                            Number(actual).toLocaleString('en-PH', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            })
+                            "FY ",
+                            label
                         ]
                     }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                        lineNumber: 86,
-                        columnNumber: 13
+                        lineNumber: 102,
+                        columnNumber: 9
                     }, this),
-                    forecast && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-emerald-600 mb-1",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "font-medium",
-                                    children: "Projected Budget: "
-                                }, void 0, false, {
-                                    fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 94,
-                                    columnNumber: 17
-                                }, this),
-                                "₱",
-                                Number(forecast).toLocaleString('en-PH', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                })
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                            lineNumber: 93,
-                            columnNumber: 15
-                        }, this)
-                    }, void 0, false, {
+                    typeof actual === "number" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-blue-600",
+                        children: [
+                            "Actual: ₱",
+                            actual.toLocaleString()
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                        lineNumber: 92,
-                        columnNumber: 13
+                        lineNumber: 105,
+                        columnNumber: 3
+                    }, this),
+                    typeof forecast === "number" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-emerald-600",
+                        children: [
+                            "Forecast: ₱",
+                            forecast.toLocaleString()
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
+                        lineNumber: 112,
+                        columnNumber: 3
+                    }, this),
+                    growthFromLastActual !== null && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-xs text-amber-600 mt-1",
+                        children: [
+                            "Growth vs last actual: ",
+                            growthFromLastActual.toFixed(2),
+                            "%"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
+                        lineNumber: 119,
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                lineNumber: 82,
-                columnNumber: 9
+                lineNumber: 101,
+                columnNumber: 7
             }, this);
         }
         return null;
@@ -476,7 +471,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                             children: "Forecast Years:"
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                            lineNumber: 112,
+                            lineNumber: 136,
                             columnNumber: 5
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -496,23 +491,23 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                     ]
                                 }, year, true, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 121,
+                                    lineNumber: 145,
                                     columnNumber: 9
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                            lineNumber: 115,
+                            lineNumber: 139,
                             columnNumber: 5
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                    lineNumber: 111,
+                    lineNumber: 135,
                     columnNumber: 3
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                lineNumber: 110,
+                lineNumber: 134,
                 columnNumber: 1
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -536,7 +531,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                     vertical: false
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 136,
+                                    lineNumber: 160,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$XAxis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["XAxis"], {
@@ -557,7 +552,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 143,
+                                    lineNumber: 167,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$YAxis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["YAxis"], {
@@ -579,23 +574,23 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 160,
+                                        lineNumber: 184,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 155,
+                                    lineNumber: 179,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Tooltip$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Tooltip"], {
                                     content: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(CustomTooltip, {}, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 169,
+                                        lineNumber: 193,
                                         columnNumber: 31
                                     }, void 0)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 169,
+                                    lineNumber: 193,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Legend$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Legend"], {
@@ -608,7 +603,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 171,
+                                    lineNumber: 195,
                                     columnNumber: 13
                                 }, this),
                                 forecastStartYear && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$ReferenceLine$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ReferenceLine"], {
@@ -618,7 +613,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                     strokeDasharray: "5 5"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 181,
+                                    lineNumber: 205,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$ReferenceLine$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ReferenceLine"], {
@@ -634,12 +629,12 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         offset: 5
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 198,
+                                        lineNumber: 222,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 192,
+                                    lineNumber: 216,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$Line$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Line"], {
@@ -656,7 +651,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                     connectNulls: true
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 210,
+                                    lineNumber: 234,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$Line$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Line"], {
@@ -679,18 +674,18 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                     connectNulls: true
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                    lineNumber: 226,
+                                    lineNumber: 250,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                            lineNumber: 132,
+                            lineNumber: 156,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                        lineNumber: 131,
+                        lineNumber: 155,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -711,7 +706,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         stopOpacity: 0.3
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 252,
+                                        lineNumber: 276,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
@@ -720,23 +715,23 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         stopOpacity: 0
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 253,
+                                        lineNumber: 277,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                lineNumber: 251,
+                                lineNumber: 275,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                            lineNumber: 250,
+                            lineNumber: 274,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                        lineNumber: 249,
+                        lineNumber: 273,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -750,7 +745,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         children: "Historical Period"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 261,
+                                        lineNumber: 285,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -761,7 +756,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 262,
+                                        lineNumber: 286,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -774,13 +769,13 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 265,
+                                        lineNumber: 289,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                lineNumber: 260,
+                                lineNumber: 284,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -791,7 +786,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         children: "Projection Period"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 271,
+                                        lineNumber: 295,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -802,7 +797,7 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 272,
+                                        lineNumber: 296,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -815,13 +810,13 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 275,
+                                        lineNumber: 299,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                lineNumber: 270,
+                                lineNumber: 294,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -829,68 +824,64 @@ function LGUFinancialForecastChart({ historyData, forecastData, lguName = "Local
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "text-sm text-gray-700 font-medium mb-1",
-                                        children: "Avg. Growth Rate"
+                                        children: "Forecast Growth Rate"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 281,
-                                        columnNumber: 13
+                                        lineNumber: 305,
+                                        columnNumber: 3
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "text-2xl font-bold text-gray-800",
-                                        children: growthMetrics ? `${growthMetrics.averageGrowth}%` : 'N/A'
+                                        children: forecastGrowthRate !== null ? `${forecastGrowthRate}%` : 'N/A'
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 284,
-                                        columnNumber: 13
+                                        lineNumber: 308,
+                                        columnNumber: 3
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "text-xs text-gray-600 mt-1",
-                                        children: "Based on last 3 fiscal years"
+                                        children: "vs last actual year"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                        lineNumber: 287,
-                                        columnNumber: 13
+                                        lineNumber: 311,
+                                        columnNumber: 3
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                                lineNumber: 280,
+                                lineNumber: 304,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                        lineNumber: 259,
+                        lineNumber: 283,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "mt-20 text-xs text-gray-500 italic",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            children: [
-                                "Note: Forecasts are based on historical trends and economic indicators. Actual results may vary based on local economic conditions, policy changes, and unforeseen circumstances. Prepared by ",
-                                lguName,
-                                " Planning and Development Office."
-                            ]
-                        }, void 0, true, {
+                            children: "Note: Forecasts are based on historical trends and economic indicators. Actual results may vary based on local economic conditions, policy changes, and unforeseen circumstances. Prepared by Danahao Barangay Treasury."
+                        }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                            lineNumber: 295,
+                            lineNumber: 320,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                        lineNumber: 294,
+                        lineNumber: 319,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-                lineNumber: 130,
+                lineNumber: 154,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx",
-        lineNumber: 107,
+        lineNumber: 131,
         columnNumber: 5
     }, this);
 }
@@ -905,75 +896,6 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 "use client";
 ;
-function ForecastSummary({ data }) {
-    if (!Array.isArray(data) || data.length === 0) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-            className: "text-sm text-gray-500 text-center",
-            children: "Forecast not available yet."
-        }, void 0, false, {
-            fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-            lineNumber: 6,
-            columnNumber: 7
-        }, this);
-    }
-    const sorted = [
-        ...data
-    ].filter((d)=>typeof d.value === "number" && !isNaN(d.value)).sort((a, b)=>a.year - b.year);
-    if (sorted.length === 0) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-            className: "text-sm text-gray-500 text-center",
-            children: "Forecast not available yet."
-        }, void 0, false, {
-            fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-            lineNumber: 18,
-            columnNumber: 7
-        }, this);
-    }
-    const nextYear = sorted[0];
-    const firstFive = sorted.slice(0, Math.min(5, sorted.length));
-    const avgForecast = firstFive.reduce((sum, e)=>sum + e.value, 0) / firstFive.length;
-    const growthRate = firstFive.length > 1 ? (firstFive[firstFive.length - 1].value - firstFive[0].value) / firstFive[0].value * 100 : 0;
-    const format = (v)=>new Intl.NumberFormat("en-PH", {
-            style: "currency",
-            currency: "PHP"
-        }).format(v);
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "grid grid-cols-1 gap-4 mt-2",
-        children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
-                title: `Next Year Forecast (${nextYear.year})`,
-                value: format(nextYear.value),
-                color: "indigo"
-            }, void 0, false, {
-                fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-                lineNumber: 46,
-                columnNumber: 5
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
-                title: "Next 2–5 Year Avg",
-                value: format(avgForecast),
-                color: "green"
-            }, void 0, false, {
-                fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-                lineNumber: 52,
-                columnNumber: 5
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
-                title: "Growth Rate",
-                value: `${growthRate.toFixed(2)}%`,
-                color: "yellow"
-            }, void 0, false, {
-                fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-                lineNumber: 58,
-                columnNumber: 5
-            }, this)
-        ]
-    }, void 0, true, {
-        fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-        lineNumber: 45,
-        columnNumber: 1
-    }, this);
-}
 function Card({ title, value, color }) {
     const styles = {
         indigo: "bg-indigo-50 text-indigo-700",
@@ -988,7 +910,7 @@ function Card({ title, value, color }) {
                 children: title
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-                lineNumber: 78,
+                lineNumber: 14,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -996,14 +918,66 @@ function Card({ title, value, color }) {
                 children: value
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-                lineNumber: 81,
+                lineNumber: 17,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
-        lineNumber: 75,
+        lineNumber: 11,
         columnNumber: 5
+    }, this);
+}
+function ForecastSummary({ data, selectedYear, lastActualYear, lastActualValue }) {
+    if (!Array.isArray(data) || data.length === 0) return null;
+    const sorted = [
+        ...data
+    ].sort((a, b)=>a.year - b.year);
+    const selectedForecast = sorted.find((d)=>d.year === selectedYear);
+    if (!selectedForecast || !lastActualValue) return null;
+    const growthRate = (selectedForecast.value - lastActualValue) / lastActualValue * 100;
+    const format = (v)=>new Intl.NumberFormat("en-PH", {
+            style: "currency",
+            currency: "PHP"
+        }).format(v);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
+                title: `Forecast (${nextYear.year})`,
+                value: format(nextYear.value),
+                color: "indigo"
+            }, void 0, false, {
+                fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
+                lineNumber: 49,
+                columnNumber: 5
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
+                title: "Next 2–5 Year Avg",
+                value: format(avgForecast),
+                color: "green"
+            }, void 0, false, {
+                fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
+                lineNumber: 55,
+                columnNumber: 5
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Card, {
+                title: "Growth Rate",
+                value: `${Number(growthRate).toLocaleString("en-PH", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}%`,
+                color: "yellow"
+            }, void 0, false, {
+                fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
+                lineNumber: 61,
+                columnNumber: 5
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx",
+        lineNumber: 48,
+        columnNumber: 3
     }, this);
 }
 }),
@@ -1028,7 +1002,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$lu
 // Hooks
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$lib$2f$useBudgetData$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/app/(protected)/transactions/lib/useBudgetData.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$lib$2f$useBreakdownData$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/app/(protected)/transactions/lib/useBreakdownData.js [app-ssr] (ecmascript)");
-// Components
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$components$2f$summaryCards$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/app/(protected)/transactions/components/summaryCards.jsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$components$2f$forecastChart$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/app/(protected)/transactions/components/forecastChart.jsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$components$2f$forecastSummary$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/thesis/app/(protected)/transactions/components/forecastSummary.jsx [app-ssr] (ecmascript)");
@@ -1046,20 +1019,28 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected
 ;
 ;
 function TransactionPage() {
-    const [session, setSession] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    /* =========================
+     BASIC STATE
+  ========================= */ const [session, setSession] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [forecastData, setForecastData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const nextYearForecast = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [breakdown, setBreakdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const { budgetData, loading, fetchBudgetData } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$lib$2f$useBudgetData$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
+    const { fetchBreakdownData } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$lib$2f$useBreakdownData$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
+    /* =========================
+     YEAR SELECTION
+  ========================= */ const [selectedYear, setSelectedYear] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    /* =========================
+     NEXT YEAR FORECAST
+  ========================= */ const nextYearForecast = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
         if (!forecastData || forecastData.length === 0) return 0;
-        return forecastData[0].value; // first forecasted year
+        return forecastData[0].value;
     }, [
         forecastData
     ]);
-    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    const { budgetData, loading, fetchBudgetData } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$lib$2f$useBudgetData$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
-    const { fetchBreakdownData } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$lib$2f$useBreakdownData$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
-    const forecastTransactions = forecastData; // or mapped forecast rows
-    const [breakdown, setBreakdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+    /* =========================
+     LOAD FORECAST
+  ========================= */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (budgetData.length > 0) loadForecast();
     }, [
         budgetData
@@ -1081,31 +1062,12 @@ function TransactionPage() {
             setError("Failed to load forecast data.");
         }
     }
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].auth.getSession().then(({ data: { session } })=>{
-            setSession(session);
-            if (session) {
-                fetchBudgetData();
-                fetchBreakdownData();
-            }
-        });
-    }, []);
-    const nextYearForecastYear = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        const currentYear = new Date().getFullYear();
-        return currentYear + 1;
-    }, []);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+    /* =========================
+     FETCH HISTORICAL EXPENSES
+  ========================= */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const fetchHistoricalExpenses = async ()=>{
-            /* 2023–2024 from breakdown */ const { data: bd, error: bdError } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from("barangay_budget_breakdown").select("description, amount").eq("category", "Expenses").gte("year", 2023).lte("year", 2024);
-            if (bdError) {
-                console.error("Breakdown fetch error:", bdError);
-                return;
-            }
-            /* 2025 from transactions */ const { data: tx, error: txError } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from("transactions").select("description, withdrawal").gte("date", "2025-01-01").lte("date", "2025-12-31");
-            if (txError) {
-                console.error("Transaction fetch error:", txError);
-                return;
-            }
+            const { data: bd } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from("barangay_budget_breakdown").select("description, amount").eq("category", "Expenses").gte("year", 2023).lte("year", 2024);
+            const { data: tx } = await __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from("transactions").select("description, withdrawal").gte("date", "2025-01-01").lte("date", "2025-12-31");
             const breakdownExpenses = (bd || []).map((r)=>({
                     description: r.description,
                     amount: Number(r.amount)
@@ -1121,18 +1083,20 @@ function TransactionPage() {
         };
         fetchHistoricalExpenses();
     }, []);
-    const expenseSourceData = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        const recommendationYear = Number(nextYearForecastYear);
-        // Use historical + actual expenses for 2026 onwards
-        if (recommendationYear >= 2026) {
+    /* =========================
+     EXPENSE SOURCE
+  ========================= */ const expenseSourceData = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (forecastData.some((f)=>f.year >= 2026)) {
             return breakdown;
         }
         return [];
     }, [
-        nextYearForecastYear,
+        forecastData,
         breakdown
     ]);
-    const expenseStats = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+    /* =========================
+     EXPENSE STATS
+  ========================= */ const expenseStats = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
         const stats = {};
         expenseSourceData.forEach((item)=>{
             const category = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$dashboard$2f$components$2f$expensePieChart$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["categorizeExpense"])(item.description);
@@ -1150,7 +1114,9 @@ function TransactionPage() {
     }, [
         expenseSourceData
     ]);
-    const utilizationRatios = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+    /* =========================
+     UTILIZATION RATIOS
+  ========================= */ const utilizationRatios = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
         const ratios = {};
         const totalExpenses = Object.values(expenseStats).reduce((s, c)=>s + c.total, 0);
         if (totalExpenses === 0) return {};
@@ -1161,32 +1127,60 @@ function TransactionPage() {
     }, [
         expenseStats
     ]);
-    const suggestedAllocationData = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        const total = Number(nextYearForecast);
-        if (!Number.isFinite(total) || total <= 0) return [];
-        return Object.entries(utilizationRatios).map(([category, ratio])=>({
-                name: category,
-                percentage: +(ratio * 100).toFixed(2),
-                amount: total * ratio,
-                description: "Based on actual historical spending"
-            }));
+    /* =========================
+     MULTI-YEAR ALLOCATIONS
+  ========================= */ const multiYearSuggestedAllocations = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (!forecastData.length) return [];
+        return forecastData.map((forecast)=>{
+            const total = Number(forecast.value);
+            if (!Number.isFinite(total) || total <= 0) return null;
+            return {
+                year: forecast.year,
+                allocations: Object.entries(utilizationRatios).map(([category, ratio])=>({
+                        name: category,
+                        percentage: +(ratio * 100).toFixed(2),
+                        amount: total * ratio,
+                        description: "Based on historical expense utilization"
+                    }))
+            };
+        }).filter(Boolean);
     }, [
-        nextYearForecast,
+        forecastData,
         utilizationRatios
     ]);
-    const detailedExpenseBreakdown = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        return Object.entries(expenseStats).map(([category, data])=>({
-                category,
-                total: data.total,
-                items: Object.entries(data.items).map(([name, amount])=>({
-                        name,
-                        amount
-                    }))
-            }));
+    /* =========================
+     SELECTED YEAR
+  ========================= */ const selectedYearAllocation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (!selectedYear) return null;
+        return multiYearSuggestedAllocations.find((y)=>y.year === selectedYear);
     }, [
-        expenseStats
+        multiYearSuggestedAllocations,
+        selectedYear
     ]);
-    console.log("Forecast value:", nextYearForecast);
+    const allocationData = selectedYearAllocation?.allocations || [];
+    const allocationTotal = allocationData.reduce((sum, item)=>sum + item.amount, 0);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (forecastData.length && !selectedYear) {
+            setSelectedYear(forecastData[0].year);
+        }
+    }, [
+        forecastData,
+        selectedYear
+    ]);
+    /* =========================
+     AUTH
+  ========================= */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].auth.getSession().then(({ data: { session } })=>{
+            setSession(session);
+            if (session) {
+                fetchBudgetData();
+                fetchBreakdownData();
+            }
+        });
+    }, []);
+    /* =========================
+     DEBUG
+  ========================= */ console.log("Forecast value:", nextYearForecast);
     console.log("Utilization ratios:", utilizationRatios);
     console.log("Breakdown length:", breakdown.length);
     console.log("Expense source data:", expenseSourceData);
@@ -1216,12 +1210,12 @@ function TransactionPage() {
                                                         children: "📈"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                        lineNumber: 240,
+                                                        lineNumber: 258,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                    lineNumber: 239,
+                                                    lineNumber: 257,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1230,51 +1224,51 @@ function TransactionPage() {
                                                         children: "Forecasting Analysis"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                        lineNumber: 243,
+                                                        lineNumber: 261,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                    lineNumber: 242,
+                                                    lineNumber: 260,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                            lineNumber: 238,
+                                            lineNumber: 256,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 237,
+                                        lineNumber: 255,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex gap-3"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 251,
+                                        lineNumber: 269,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                lineNumber: 236,
+                                lineNumber: 254,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                            lineNumber: 235,
+                            lineNumber: 253,
                             columnNumber: 1
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                        lineNumber: 234,
+                        lineNumber: 252,
                         columnNumber: 9
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                    lineNumber: 233,
+                    lineNumber: 251,
                     columnNumber: 7
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1290,12 +1284,12 @@ function TransactionPage() {
                                         className: "text-red-500 h-5 w-5 flex-shrink-0"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 267,
+                                        lineNumber: 285,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 266,
+                                    lineNumber: 284,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1306,7 +1300,7 @@ function TransactionPage() {
                                             children: "Forecast Error"
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                            lineNumber: 270,
+                                            lineNumber: 288,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1314,13 +1308,13 @@ function TransactionPage() {
                                             children: error
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                            lineNumber: 271,
+                                            lineNumber: 289,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 269,
+                                    lineNumber: 287,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1328,23 +1322,23 @@ function TransactionPage() {
                                     children: "Retry"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 273,
+                                    lineNumber: 291,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                            lineNumber: 265,
+                            lineNumber: 283,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                        lineNumber: 264,
+                        lineNumber: 282,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                    lineNumber: 263,
+                    lineNumber: 281,
                     columnNumber: 9
                 }, this),
                 loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1360,7 +1354,7 @@ function TransactionPage() {
                                         className: "animate-spin rounded-full h-10 w-10 border-3 border-slate-200 border-t-emerald-600 mb-4"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 287,
+                                        lineNumber: 305,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1368,7 +1362,7 @@ function TransactionPage() {
                                         children: "Loading forecast analytics..."
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 288,
+                                        lineNumber: 306,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1376,28 +1370,28 @@ function TransactionPage() {
                                         children: "Processing historical data and generating insights"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 289,
+                                        lineNumber: 307,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                lineNumber: 286,
+                                lineNumber: 304,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                            lineNumber: 285,
+                            lineNumber: 303,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                        lineNumber: 284,
+                        lineNumber: 302,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                    lineNumber: 283,
+                    lineNumber: 301,
                     columnNumber: 9
                 }, this),
                 forecastData.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1420,58 +1414,77 @@ function TransactionPage() {
                                                             children: "Budget Forecast Analysis"
                                                         }, void 0, false, {
                                                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                            lineNumber: 308,
+                                                            lineNumber: 326,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                        lineNumber: 307,
+                                                        lineNumber: 325,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "flex gap-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                        lineNumber: 313,
+                                                        lineNumber: 331,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                lineNumber: 306,
+                                                lineNumber: 324,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "p-6",
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "h-96",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$components$2f$forecastChart$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                                        historyData: budgetData,
-                                                        forecastData: forecastData
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "h-96",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$components$2f$forecastChart$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                                            historyData: budgetData,
+                                                            forecastData: forecastData
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
+                                                            lineNumber: 337,
+                                                            columnNumber: 23
+                                                        }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                        lineNumber: 319,
-                                                        columnNumber: 23
+                                                        lineNumber: 336,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "mt-6",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transactions$2f$components$2f$forecastSummary$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                                            data: forecastData,
+                                                            selectedYear: selectedYear,
+                                                            lastActualYear: Math.max(...budgetData.map((b)=>b.year)),
+                                                            lastActualValue: budgetData.find((b)=>b.year === Math.max(...budgetData.map((b)=>b.year)))?.amount
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
+                                                            lineNumber: 343,
+                                                            columnNumber: 3
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
+                                                        lineNumber: 342,
+                                                        columnNumber: 21
                                                     }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                    lineNumber: 318,
-                                                    columnNumber: 21
-                                                }, this)
-                                            }, void 0, false, {
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                lineNumber: 317,
+                                                lineNumber: 335,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 305,
+                                        lineNumber: 323,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 304,
+                                    lineNumber: 322,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1488,7 +1501,7 @@ function TransactionPage() {
                                                         children: "Proposed Allocation"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                        lineNumber: 345,
+                                                        lineNumber: 366,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1499,7 +1512,7 @@ function TransactionPage() {
                                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$chart$2f$PieChart$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PieChart"], {
                                                                 children: [
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$polar$2f$Pie$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Pie"], {
-                                                                        data: suggestedAllocationData,
+                                                                        data: allocationData,
                                                                         dataKey: "amount",
                                                                         nameKey: "name",
                                                                         cx: "50%",
@@ -1509,7 +1522,7 @@ function TransactionPage() {
                                                                         label: false,
                                                                         stroke: "#ffffff",
                                                                         strokeWidth: 3,
-                                                                        children: suggestedAllocationData.map((_, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Cell$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Cell"], {
+                                                                        children: allocationData.map((_, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Cell$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Cell"], {
                                                                                 fill: [
                                                                                     "#0ea5e9",
                                                                                     "#ef4444",
@@ -1520,12 +1533,12 @@ function TransactionPage() {
                                                                                 ][index]
                                                                             }, index, false, {
                                                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                                lineNumber: 367,
+                                                                                lineNumber: 388,
                                                                                 columnNumber: 33
                                                                             }, this))
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                        lineNumber: 353,
+                                                                        lineNumber: 374,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Tooltip$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Tooltip"], {
@@ -1542,24 +1555,41 @@ function TransactionPage() {
                                                                         }
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                        lineNumber: 380,
+                                                                        lineNumber: 401,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                lineNumber: 352,
+                                                                lineNumber: 373,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                            lineNumber: 351,
+                                                            lineNumber: 372,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                        lineNumber: 350,
+                                                        lineNumber: 371,
                                                         columnNumber: 23
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                        value: selectedYear ?? "",
+                                                        onChange: (e)=>setSelectedYear(Number(e.target.value)),
+                                                        className: "mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm",
+                                                        children: forecastData.map((f, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: f.year,
+                                                                children: f.year
+                                                            }, f.year, false, {
+                                                                fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
+                                                                lineNumber: 420,
+                                                                columnNumber: 5
+                                                            }, this))
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
+                                                        lineNumber: 414,
+                                                        columnNumber: 1
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "space-y-4",
@@ -1569,34 +1599,38 @@ function TransactionPage() {
                                                                 children: [
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                         className: "text-slate-700 font-medium",
-                                                                        children: "Predicted Budget"
-                                                                    }, void 0, false, {
+                                                                        children: [
+                                                                            "Predicted Budget (",
+                                                                            selectedYear,
+                                                                            ")"
+                                                                        ]
+                                                                    }, void 0, true, {
                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                        lineNumber: 397,
-                                                                        columnNumber: 27
+                                                                        lineNumber: 429,
+                                                                        columnNumber: 3
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                         className: "text-slate-900 font-bold",
                                                                         children: [
                                                                             "₱",
-                                                                            suggestedAllocationData.reduce((sum, item)=>sum + item.amount, 0).toLocaleString("en-PH", {
+                                                                            allocationData.reduce((sum, item)=>sum + item.amount, 0).toLocaleString("en-PH", {
                                                                                 minimumFractionDigits: 2
                                                                             })
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                        lineNumber: 398,
-                                                                        columnNumber: 27
+                                                                        lineNumber: 432,
+                                                                        columnNumber: 3
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                lineNumber: 396,
+                                                                lineNumber: 428,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "space-y-3",
-                                                                children: suggestedAllocationData.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                children: allocationData.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "flex items-center justify-between p-3 bg-white rounded-lg border border-slate-100",
                                                                         children: [
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1616,7 +1650,7 @@ function TransactionPage() {
                                                                                         }
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                                        lineNumber: 409,
+                                                                                        lineNumber: 444,
                                                                                         columnNumber: 33
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1624,13 +1658,13 @@ function TransactionPage() {
                                                                                         children: item.name
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                                        lineNumber: 418,
+                                                                                        lineNumber: 453,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                                lineNumber: 408,
+                                                                                lineNumber: 443,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1647,73 +1681,73 @@ function TransactionPage() {
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                                        lineNumber: 421,
+                                                                                        lineNumber: 456,
                                                                                         columnNumber: 33
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                                         className: "text-xs text-slate-500",
                                                                                         children: [
-                                                                                            (item.amount / suggestedAllocationData.reduce((sum, i)=>sum + i.amount, 0) * 100).toFixed(1),
+                                                                                            (item.amount / allocationData.reduce((sum, i)=>sum + i.amount, 0) * 100).toFixed(1),
                                                                                             "%"
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                                        lineNumber: 427,
+                                                                                        lineNumber: 462,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                                lineNumber: 420,
+                                                                                lineNumber: 455,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, item.name, true, {
                                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                        lineNumber: 407,
+                                                                        lineNumber: 442,
                                                                         columnNumber: 29
                                                                     }, this))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                                lineNumber: 405,
+                                                                lineNumber: 440,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                        lineNumber: 395,
+                                                        lineNumber: 427,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                lineNumber: 344,
+                                                lineNumber: 365,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                            lineNumber: 343,
+                                            lineNumber: 364,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 330,
+                                        lineNumber: 360,
                                         columnNumber: 13
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 329,
+                                    lineNumber: 359,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                            lineNumber: 301,
+                            lineNumber: 319,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                        lineNumber: 300,
+                        lineNumber: 318,
                         columnNumber: 11
                     }, this)
                 }, void 0, false),
@@ -1728,12 +1762,12 @@ function TransactionPage() {
                                     className: "h-10 w-10 text-slate-500"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 461,
+                                    lineNumber: 496,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                lineNumber: 460,
+                                lineNumber: 495,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1741,7 +1775,7 @@ function TransactionPage() {
                                 children: "No Budget Data Available"
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                lineNumber: 463,
+                                lineNumber: 498,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1749,7 +1783,7 @@ function TransactionPage() {
                                 children: "Upload historical budget data to generate AI-powered forecasts and strategic recommendations"
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                lineNumber: 466,
+                                lineNumber: 501,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1760,7 +1794,7 @@ function TransactionPage() {
                                         children: "View Sample Report"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 470,
+                                        lineNumber: 505,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1772,151 +1806,55 @@ function TransactionPage() {
                                                     children: "📤"
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                    lineNumber: 475,
+                                                    lineNumber: 510,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Upload Budget Data"
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                                    lineNumber: 476,
+                                                    lineNumber: 511,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                            lineNumber: 474,
+                                            lineNumber: 509,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                        lineNumber: 473,
+                                        lineNumber: 508,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                lineNumber: 469,
+                                lineNumber: 504,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                        lineNumber: 459,
+                        lineNumber: 494,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                    lineNumber: 458,
+                    lineNumber: 493,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-            lineNumber: 228,
+            lineNumber: 246,
             columnNumber: 3
         }, this)
     }, void 0, false, {
         fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-        lineNumber: 227,
+        lineNumber: 245,
         columnNumber: 3
     }, this);
-    //TURBOPACK unreachable
-    ;
-    /* ===== ENHANCED STAT CARD COMPONENT ===== */ function StatCard({ title, value, icon, trend }) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "group",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "p-4 hover:bg-slate-50 rounded-lg transition-colors",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center gap-4",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "h-12 w-12 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-600",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-lg",
-                                children: icon
-                            }, void 0, false, {
-                                fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                lineNumber: 495,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                            lineNumber: 494,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex-1",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-sm text-slate-500 font-medium",
-                                    children: title
-                                }, void 0, false, {
-                                    fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 498,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-xl font-bold text-slate-900 mt-1",
-                                    children: value
-                                }, void 0, false, {
-                                    fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 499,
-                                    columnNumber: 13
-                                }, this),
-                                trend && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center gap-2 mt-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: `text-xs font-medium px-2 py-0.5 rounded-full ${trend.positive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`,
-                                            children: [
-                                                trend.positive ? '↑' : '↓',
-                                                " ",
-                                                trend.value
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                            lineNumber: 502,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "text-xs text-slate-500",
-                                            children: "vs last period"
-                                        }, void 0, false, {
-                                            fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                            lineNumber: 507,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                                    lineNumber: 501,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                            lineNumber: 497,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                    lineNumber: 493,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-                lineNumber: 492,
-                columnNumber: 7
-            }, this)
-        }, void 0, false, {
-            fileName: "[project]/thesis/app/(protected)/transactions/page.jsx",
-            lineNumber: 491,
-            columnNumber: 5
-        }, this);
-    }
 }
 }),
 ];

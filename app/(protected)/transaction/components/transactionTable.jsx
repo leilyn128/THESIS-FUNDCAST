@@ -16,6 +16,8 @@ export default function TransactionTable({
   loading,
   onEditTransaction,
   onDeleteTransaction,
+  hideActions = false
+
 }) {
   const [editingId, setEditingId] = useState(null);
   const [rowForm, setRowForm] = useState({});
@@ -82,6 +84,17 @@ const formatDescription = (text = "") =>
     .toLowerCase()
     .replace(/^\w/, (c) => c.toUpperCase());
 
+
+{!hideActions && (
+  <th className="px-4 py-2">Actions</th>
+)}
+
+{!hideActions && (
+  <td className="px-4 py-2">
+    {/* edit / delete buttons */}
+  </td>
+)}
+    
  return (
   <div className="print-root bg-white">
     <div className="print-area">

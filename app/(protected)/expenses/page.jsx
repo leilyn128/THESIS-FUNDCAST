@@ -440,21 +440,24 @@ return (
           {/* Input and Action */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
             <div className="relative flex-grow">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"></span>
-              <input
-                type="number"
-                placeholder="Enter total budget amount"
-                value={totalBudget}
-                onChange={(e) => setTotalBudget(e.target.value)}
-                  disabled={isBudgetSaved}
+  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-medium">
+    ₱
+  </span>
 
-className={`w-full sm:w-64 rounded-lg px-4 py-2 text-sm border text-slate-900
-    ${isBudgetSaved
-      ? "bg-slate-100 cursor-not-allowed text-slate-500"
-      : "bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-    }`}
-/>
-            </div>
+  <input
+    type="number"
+    placeholder="Enter total budget amount"
+    value={totalBudget}
+    onChange={(e) => setTotalBudget(e.target.value)}
+    disabled={isBudgetSaved}
+    className={`w-full sm:w-64 rounded-lg pl-8 pr-4 py-2 text-sm border text-slate-900
+      ${isBudgetSaved
+        ? "bg-slate-100 cursor-not-allowed text-slate-500"
+        : "bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+      }`}
+  />
+</div>
+
             
             {!isBudgetSaved && (
   <button

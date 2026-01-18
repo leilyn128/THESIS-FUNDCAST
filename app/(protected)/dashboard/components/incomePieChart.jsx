@@ -14,8 +14,10 @@ const incomeCOLORS = [
 ];
 
 // --- AUTO CATEGORIZER FOR INCOME ---
-function categorizeIncome(description = "") {
+export function categorizeIncome(description = "") {
   const t = description.toLowerCase();
+ 
+
 
   if (t.includes("clearance") || t.includes("certification")) {
     return "Clearance & Certification fees";

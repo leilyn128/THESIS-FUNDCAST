@@ -2,18 +2,20 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { supabase } from "../../lib/supabaseClient"
 import LoginLayout from "../../components/layouts/authlayout"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("") // user must type this manually
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [isSignup, setIsSignup] = useState(false)
+
   const router = useRouter()
 
-  const DEFAULT_EMAIL = "treasurer@gmail.com" // ✅ fixed required email
+  const DEFAULT_EMAIL = "treasurer@gmail.com"
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -21,38 +23,32 @@ export default function LoginPage() {
     setError("")
 
     try {
-      // ✅ only allow if email matches default
+      // 🔒 Treasurer-only email restriction
       if (email.trim().toLowerCase() !== DEFAULT_EMAIL.toLowerCase()) {
         setError(`Only the email "${DEFAULT_EMAIL}" is allowed.`)
         setLoading(false)
         return
       }
 
-      let data, error
-
       if (isSignup) {
-        // 🔥 Signup
-        const result = await supabase.auth.signUp({
+        // 🆕 Signup
+        const { error } = await supabase.auth.signUp({
           email,
           password,
         })
-        data = result.data
-        error = result.error
 
         if (error) throw error
 
-        alert("Signup successful!")
+        alert("Signup successful! You may now log in.")
         setIsSignup(false)
-        setPassword("")
         setEmail("")
+        setPassword("")
       } else {
         // 🔑 Login
-        const result = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
-        data = result.data
-        error = result.error
 
         if (error) throw error
 
@@ -62,7 +58,37 @@ export default function LoginPage() {
         }
       }
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.")
+      setError(err.message || "Something went wrong.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // 🔁 Forgot Password
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError("Please enter your email first.")
+      return
+    }
+
+    if (email.trim().toLowerCase() !== DEFAULT_EMAIL.toLowerCase()) {
+      setError(`Only the email "${DEFAULT_EMAIL}" is allowed.`)
+      return
+    }
+
+    try {
+      setLoading(true)
+      setError("")
+
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      })
+
+      if (error) throw error
+
+      alert("Password reset link sent to your email.")
+    } catch (err) {
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -72,11 +98,24 @@ export default function LoginPage() {
     <LoginLayout>
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+
+          {/* LOGO */}
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/logo.png"
+              alt="App Logo"
+              width={90}
+              height={90}
+              priority
+            />
+          </div>
+
           <h1 className="text-3xl font-bold mb-6 text-center text-green-600">
             {isSignup ? "Create Treasurer Account" : "Welcome Treasurer!"}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium mb-2">Email</label>
               <input
@@ -85,10 +124,11 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-400"
-                placeholder="Enter your email"
+                placeholder="treasurer@gmail.com"
               />
             </div>
 
+            {/* Password */}
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
               <input
@@ -101,8 +141,25 @@ export default function LoginPage() {
               />
             </div>
 
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+            {/* Forgot Password */}
+            {!isSignup && (
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm text-green-600 hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            )}
 
+            {/* Error */}
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -118,15 +175,15 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Toggle Signup/Login */}
+          {/* Toggle */}
           <p className="text-sm text-center mt-4">
             {isSignup ? "Already have an account?" : "No account yet?"}{" "}
             <button
               onClick={() => {
                 setIsSignup(!isSignup)
                 setError("")
-                setPassword("")
                 setEmail("")
+                setPassword("")
               }}
               className="text-green-600 font-medium hover:underline"
             >

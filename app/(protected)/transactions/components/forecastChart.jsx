@@ -70,38 +70,62 @@ const forecastMapped = Array.isArray(forecastData)
   };
 
   const growthMetrics = getGrowthMetrics();
+const forecastGrowthRate = (() => {
+  if (!growthMetrics || forecastMapped.length === 0) return null;
+
+  const lastForecast =
+    forecastMapped[forecastMapped.length - 1]?.forecastBudget;
+
+  if (!lastForecast || !growthMetrics.lastActual) return null;
+
+  return (
+    ((lastForecast - growthMetrics.lastActual) /
+      growthMetrics.lastActual) *
+    100
+  ).toFixed(2);
+})();
 
   // ---------- CUSTOM TOOLTIP ----------
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      const isForecast = label > lastActualYear;
-      const actual = payload.find(p => p.dataKey === 'actualBudget')?.value;
-      const forecast = payload.find(p => p.dataKey === 'forecastBudget')?.value;
-      
-      return (
-        <div className="bg-white p-4 border border-gray-200 shadow-lg rounded-lg">
-          <p className="font-semibold text-gray-800 mb-2">
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    const isForecast = label > lastActualYear;
+    const actual = payload.find(p => p.dataKey === 'actualBudget')?.value;
+    const forecast = payload.find(p => p.dataKey === 'forecastBudget')?.value;
+
+    const growthFromLastActual =
+      isForecast && growthMetrics?.lastActual && forecast
+        ? ((forecast - growthMetrics.lastActual) / growthMetrics.lastActual) * 100
+        : null;
+
+    return (
+      <div className="bg-white p-3 border rounded shadow text-sm">
+        <p className="font-semibold">FY {label}</p>
+
+        {typeof actual === "number" && (
+  <p className="text-blue-600">
+    Actual: ₱{actual.toLocaleString()}
+  </p>
+)}
+
+
+        {typeof forecast === "number" && (
+  <p className="text-emerald-600">
+    Forecast: ₱{forecast.toLocaleString()}
+  </p>
+)}
+
+
+        {growthFromLastActual !== null && (
+          <p className="text-xs text-amber-600 mt-1">
+            Growth vs last actual: {growthFromLastActual.toFixed(2)}%
           </p>
-          {actual && (
-            <p className="text-blue-600 mb-1">
-              <span className="font-medium">Actual Budget: </span>
-              ₱{Number(actual).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          )}
-          {forecast && (
-            <div>
-              <p className="text-emerald-600 mb-1">
-                <span className="font-medium">Projected Budget: </span>
-                ₱{Number(forecast).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </p>
-             
-            </div>
-          )}
-        </div>
-      );
-    }
-    return null;
-  };
+        )}
+      </div>
+    );
+  }
+  return null;
+};
+
 
   return (
     <div className=" overflow-hidden">
@@ -278,16 +302,17 @@ const forecastMapped = Array.isArray(forecastData)
           </div>
 
           <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="text-sm text-gray-700 font-medium mb-1">
-              Avg. Growth Rate
-            </p>
-            <p className="text-2xl font-bold text-gray-800">
-              {growthMetrics ? `${growthMetrics.averageGrowth}%` : 'N/A'}
-            </p>
-            <p className="text-xs text-gray-600 mt-1">
-              Based on last 3 fiscal years
-            </p>
-          </div>
+  <p className="text-sm text-gray-700 font-medium mb-1">
+    Forecast Growth Rate
+  </p>
+  <p className="text-2xl font-bold text-gray-800">
+    {forecastGrowthRate !== null ? `${forecastGrowthRate}%` : 'N/A'}
+  </p>
+  <p className="text-xs text-gray-600 mt-1">
+    vs last actual year
+  </p>
+</div>
+
         </div>
 
         {/* DISCLAIMER */}
@@ -295,7 +320,7 @@ const forecastMapped = Array.isArray(forecastData)
           <p>
             Note: Forecasts are based on historical trends and economic indicators. 
             Actual results may vary based on local economic conditions, policy changes, 
-            and unforeseen circumstances. Prepared by {lguName} Planning and Development Office.
+            and unforeseen circumstances. Prepared by Danahao Barangay Treasury.
           </p>
         </div>
       </div>

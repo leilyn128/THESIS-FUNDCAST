@@ -1,10 +1,9 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react";
-import { categorizeExpense } 
-from "../dashboard/components/expensePieChart";
+import { categorizeExpense } from "../dashboard/components/expensePieChart";
+import { supabase } from "../../../lib/supabaseClient";
 
-import { supabase } from "../../../lib/supabaseClient"
 import {
   ResponsiveContainer,
   PieChart,
@@ -13,214 +12,233 @@ import {
   Tooltip,
 } from "recharts";
 
-import {
-  AlertCircle,
-  BarChart3,
-} from "lucide-react";
+import { AlertCircle, BarChart3 } from "lucide-react";
+
 // Hooks
-import useBudgetData from "./lib/useBudgetData"
-import useBreakdownData from "./lib/useBreakdownData"
-import ExpensePieChart from "../dashboard/components/expensePieChart";
+import useBudgetData from "./lib/useBudgetData";
+import useBreakdownData from "./lib/useBreakdownData";
 
 // Components
-import SummaryCards from "./components/summaryCards"
-import ForecastChart from "./components/forecastChart"
-import ForecastSummary from "./components/forecastSummary"
+import ExpensePieChart from "../dashboard/components/expensePieChart";
+import SummaryCards from "./components/summaryCards";
+import ForecastChart from "./components/forecastChart";
+import ForecastSummary from "./components/forecastSummary";
 
 export default function TransactionPage() {
-  const [session, setSession] = useState(null)
-  const [forecastData, setForecastData] = useState([])
+
+  /* =========================
+     BASIC STATE
+  ========================= */
+  const [session, setSession] = useState(null);
+  const [forecastData, setForecastData] = useState([]);
+  const [error, setError] = useState(null);
+  const [breakdown, setBreakdown] = useState([]);
+
+  const { budgetData, loading, fetchBudgetData } = useBudgetData();
+  const { fetchBreakdownData } = useBreakdownData();
+
+  /* =========================
+     YEAR SELECTION
+  ========================= */
+  const [selectedYear, setSelectedYear] = useState(null);
+
+  /* =========================
+     NEXT YEAR FORECAST
+  ========================= */
   const nextYearForecast = useMemo(() => {
-  if (!forecastData || forecastData.length === 0) return 0;
-  return forecastData[0].value; // first forecasted year
-}, [forecastData]);
+    if (!forecastData || forecastData.length === 0) return 0;
+    return forecastData[0].value;
+  }, [forecastData]);
 
-  const [error, setError] = useState(null)
-
-  const { budgetData, loading, fetchBudgetData } = useBudgetData()
-  const { fetchBreakdownData } = useBreakdownData()
-  const forecastTransactions = forecastData; // or mapped forecast rows
-
-const [breakdown, setBreakdown] = useState([]);
-
+  /* =========================
+     LOAD FORECAST
+  ========================= */
   useEffect(() => {
-    if (budgetData.length > 0) loadForecast()
-  }, [budgetData])
+    if (budgetData.length > 0) loadForecast();
+  }, [budgetData]);
 
   async function loadForecast() {
-  try {
-    setError(null)
+    try {
+      setError(null);
 
-    const res = await fetch("/api/forecast", { cache: "no-store" })
-    if (!res.ok) throw new Error("Forecast failed")
+      const res = await fetch("/api/forecast", { cache: "no-store" });
+      if (!res.ok) throw new Error("Forecast failed");
 
-    const data = await res.json()
+      const data = await res.json();
+      const lastYear = Math.max(...budgetData.map(d => d.year));
 
-    const lastYear = Math.max(...budgetData.map(d => d.year))
-
-    setForecastData(
-      data
-        .filter(d => d.year > lastYear)
-        .map(d => ({
-          year: d.year,
-          value: Number(d.prediction), // ✅ single locked value
-        }))
-    )
-  } catch {
-    setError("Failed to load forecast data.")
+      setForecastData(
+        data
+          .filter(d => d.year > lastYear)
+          .map(d => ({
+            year: d.year,
+            value: Number(d.prediction),
+          }))
+      );
+    } catch {
+      setError("Failed to load forecast data.");
+    }
   }
-}
 
-
+  /* =========================
+     FETCH HISTORICAL EXPENSES
+  ========================= */
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      if (session) {
-        fetchBudgetData()
-        fetchBreakdownData()
-      }
-    })
-  }, [])
+    const fetchHistoricalExpenses = async () => {
+      const { data: bd } = await supabase
+        .from("barangay_budget_breakdown")
+        .select("description, amount")
+        .eq("category", "Expenses")
+        .gte("year", 2023)
+        .lte("year", 2024);
 
+      const { data: tx } = await supabase
+        .from("transactions")
+        .select("description, withdrawal")
+        .gte("date", "2025-01-01")
+        .lte("date", "2025-12-31");
 
-  const nextYearForecastYear = useMemo(() => {
-  const currentYear = new Date().getFullYear();
-  return currentYear + 1;
-}, []);
-
-
-
-
-useEffect(() => {
-  const fetchHistoricalExpenses = async () => {
-    /* 2023–2024 from breakdown */
-    const { data: bd, error: bdError } = await supabase
-      .from("barangay_budget_breakdown")
-      .select("description, amount")
-      .eq("category", "Expenses")
-      .gte("year", 2023)
-      .lte("year", 2024);
-
-    if (bdError) {
-      console.error("Breakdown fetch error:", bdError);
-      return;
-    }
-
-    /* 2025 from transactions */
-    const { data: tx, error: txError } = await supabase
-      .from("transactions")
-      .select("description, withdrawal")
-      .gte("date", "2025-01-01")
-      .lte("date", "2025-12-31");
-
-    if (txError) {
-      console.error("Transaction fetch error:", txError);
-      return;
-    }
-
-    const breakdownExpenses = (bd || []).map(r => ({
-      description: r.description,
-      amount: Number(r.amount),
-    }));
-
-    const transactionExpenses = (tx || [])
-      .filter(t => t.withdrawal > 0)
-      .map(t => ({
-        description: t.description,
-        amount: Number(t.withdrawal),
+      const breakdownExpenses = (bd || []).map(r => ({
+        description: r.description,
+        amount: Number(r.amount),
       }));
 
-    setBreakdown([
-      ...breakdownExpenses,
-      ...transactionExpenses,
-    ]);
-  };
+      const transactionExpenses = (tx || [])
+        .filter(t => t.withdrawal > 0)
+        .map(t => ({
+          description: t.description,
+          amount: Number(t.withdrawal),
+        }));
 
-  fetchHistoricalExpenses();
+      setBreakdown([
+        ...breakdownExpenses,
+        ...transactionExpenses,
+      ]);
+    };
 
+    fetchHistoricalExpenses();
+  }, []);
 
-}, []);
-const expenseSourceData = useMemo(() => {
-  const recommendationYear = Number(nextYearForecastYear);
-
-  // Use historical + actual expenses for 2026 onwards
-  if (recommendationYear >= 2026) {
-    return breakdown;
-  }
-
-  return [];
-}, [nextYearForecastYear, breakdown]);
-
-
-
-const expenseStats = useMemo(() => {
-  const stats = {};
-
-  expenseSourceData.forEach(item => {
-    const category = categorizeExpense(item.description);
-    const subcategory = item.description;
-
-    if (!stats[category]) {
-      stats[category] = { total: 0, items: {} };
+  /* =========================
+     EXPENSE SOURCE
+  ========================= */
+  const expenseSourceData = useMemo(() => {
+    if (forecastData.some(f => f.year >= 2026)) {
+      return breakdown;
     }
+    return [];
+  }, [forecastData, breakdown]);
 
-    stats[category].total += item.amount;
+  /* =========================
+     EXPENSE STATS
+  ========================= */
+  const expenseStats = useMemo(() => {
+    const stats = {};
 
-    stats[category].items[subcategory] =
-      (stats[category].items[subcategory] || 0) + item.amount;
-  });
+    expenseSourceData.forEach(item => {
+      const category = categorizeExpense(item.description);
+      const subcategory = item.description;
 
-  return stats;
-}, [expenseSourceData]);
+      if (!stats[category]) {
+        stats[category] = { total: 0, items: {} };
+      }
 
+      stats[category].total += item.amount;
+      stats[category].items[subcategory] =
+        (stats[category].items[subcategory] || 0) + item.amount;
+    });
 
-const utilizationRatios = useMemo(() => {
-  const ratios = {};
-  const totalExpenses = Object.values(expenseStats)
-    .reduce((s, c) => s + c.total, 0);
+    return stats;
+  }, [expenseSourceData]);
 
-  if (totalExpenses === 0) return {};
+  /* =========================
+     UTILIZATION RATIOS
+  ========================= */
+  const utilizationRatios = useMemo(() => {
+    const ratios = {};
+    const totalExpenses = Object.values(expenseStats)
+      .reduce((s, c) => s + c.total, 0);
 
-  Object.entries(expenseStats).forEach(([category, data]) => {
-    ratios[category] = data.total / totalExpenses;
-  });
+    if (totalExpenses === 0) return {};
 
-  return ratios;
-}, [expenseStats]);
+    Object.entries(expenseStats).forEach(([category, data]) => {
+      ratios[category] = data.total / totalExpenses;
+    });
 
-const suggestedAllocationData = useMemo(() => {
-  const total = Number(nextYearForecast);
-  if (!Number.isFinite(total) || total <= 0) return [];
+    return ratios;
+  }, [expenseStats]);
 
-  return Object.entries(utilizationRatios).map(
-    ([category, ratio]) => ({
-      name: category,
-      percentage: +(ratio * 100).toFixed(2),
-      amount: total * ratio,
-      description: "Based on actual historical spending",
-    })
+  /* =========================
+     MULTI-YEAR ALLOCATIONS
+  ========================= */
+  const multiYearSuggestedAllocations = useMemo(() => {
+    if (!forecastData.length) return [];
+
+    return forecastData
+      .map(forecast => {
+        const total = Number(forecast.value);
+        if (!Number.isFinite(total) || total <= 0) return null;
+
+        return {
+          year: forecast.year,
+          allocations: Object.entries(utilizationRatios).map(
+            ([category, ratio]) => ({
+              name: category,
+              percentage: +(ratio * 100).toFixed(2),
+              amount: total * ratio,
+              description: "Based on historical expense utilization",
+            })
+          ),
+        };
+      })
+      .filter(Boolean);
+  }, [forecastData, utilizationRatios]);
+
+  /* =========================
+     SELECTED YEAR
+  ========================= */
+const selectedYearAllocation = useMemo(() => {
+  if (!selectedYear) return null;
+  return multiYearSuggestedAllocations.find(
+    y => y.year === selectedYear
   );
-}, [nextYearForecast, utilizationRatios]);
+}, [multiYearSuggestedAllocations, selectedYear]);
 
-const detailedExpenseBreakdown = useMemo(() => {
-  return Object.entries(expenseStats).map(
-    ([category, data]) => ({
-      category,
-      total: data.total,
-      items: Object.entries(data.items).map(
-        ([name, amount]) => ({
-          name,
-          amount,
-        })
-      ),
-    })
-  );
-}, [expenseStats]);
-console.log("Forecast value:", nextYearForecast);
-console.log("Utilization ratios:", utilizationRatios);
-console.log("Breakdown length:", breakdown.length);
-console.log("Expense source data:", expenseSourceData);
-console.log("Expense stats:", expenseStats);
+const allocationData = selectedYearAllocation?.allocations || [];
+
+const allocationTotal = allocationData.reduce(
+  (sum, item) => sum + item.amount,
+  0
+);
+
+useEffect(() => {
+  if (forecastData.length && !selectedYear) {
+    setSelectedYear(forecastData[0].year);
+  }
+}, [forecastData, selectedYear]);
+
+  /* =========================
+     AUTH
+  ========================= */
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) {
+        fetchBudgetData();
+        fetchBreakdownData();
+      }
+    });
+  }, []);
+
+  /* =========================
+     DEBUG
+  ========================= */
+  console.log("Forecast value:", nextYearForecast);
+  console.log("Utilization ratios:", utilizationRatios);
+  console.log("Breakdown length:", breakdown.length);
+  console.log("Expense source data:", expenseSourceData);
+  console.log("Expense stats:", expenseStats);
+
 
 /* ---------------- UI ---------------- */
 return (
@@ -321,7 +339,19 @@ return (
                         forecastData={forecastData}
                       />
                     </div>
-                    
+                    <div className="mt-6">
+  <ForecastSummary
+  data={forecastData}
+  selectedYear={selectedYear}
+  lastActualYear={Math.max(...budgetData.map(b => b.year))}
+  lastActualValue={
+    budgetData.find(b => b.year === Math.max(...budgetData.map(b => b.year)))
+      ?.amount
+  }
+/>
+
+</div>
+
                   </div>
                 </div>
               </div>
@@ -329,15 +359,6 @@ return (
           <div className="mb-8">
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
        
-
-
-             
-               
-              
-              
-       
-
-              
 
                   {/* ALLOCATION VISUALIZATION */}
                   <div className="lg:col-span-1">
@@ -351,7 +372,7 @@ return (
                         <ResponsiveContainer width="100%" height={220}>
                           <PieChart>
                             <Pie
-  data={suggestedAllocationData}
+  data={allocationData}
   dataKey="amount"
   nameKey="name"
 
@@ -363,7 +384,7 @@ return (
                               stroke="#ffffff"
                               strokeWidth={3}
                             >
-                              {suggestedAllocationData.map((_, index) => (
+                              {allocationData.map((_, index) => (
                                 <Cell
                                   key={index}
                                   fill={[
@@ -390,20 +411,34 @@ return (
                           </PieChart>
                         </ResponsiveContainer>
                       </div>
+<select
+  value={selectedYear ?? ""}
+  onChange={(e) => setSelectedYear(Number(e.target.value))}
+  className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+>
+  {forecastData.map((f, index) => (
+    <option key={f.year} value={f.year}>
+        {f.year}
+    </option>
+  ))}
+</select>
 
                       {/* ALLOCATION DETAILS */}
                       <div className="space-y-4">
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-slate-700 font-medium">Predicted Budget</span>
-                          <span className="text-slate-900 font-bold">
-₱{suggestedAllocationData
-  .reduce((sum, item) => sum + item.amount, 0)
-  .toLocaleString("en-PH", { minimumFractionDigits: 2 })}
-                          </span>
-                        </div>
+  <span className="text-slate-700 font-medium">
+    Predicted Budget ({selectedYear})
+  </span>
+  <span className="text-slate-900 font-bold">
+    ₱{allocationData
+      .reduce((sum, item) => sum + item.amount, 0)
+      .toLocaleString("en-PH", { minimumFractionDigits: 2 })}
+  </span>
+</div>
+
                         
                         <div className="space-y-3">
-                          {suggestedAllocationData.map((item, index) => (
+                          {allocationData.map((item, index) => (
                             <div key={item.name} className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-100">
                               <div className="flex items-center gap-3">
                                 <div
@@ -427,7 +462,7 @@ return (
                                 <div className="text-xs text-slate-500">
 {(
   (item.amount /
-    suggestedAllocationData.reduce((sum, i) => sum + i.amount, 0)) *
+    allocationData.reduce((sum, i) => sum + i.amount, 0)) *
   100
 ).toFixed(1)}%
                                 </div>
@@ -485,31 +520,4 @@ return (
   </div>
 );
 
-/* ===== ENHANCED STAT CARD COMPONENT ===== */
-function StatCard({ title, value, icon, trend }) {
-  return (
-    <div className="group">
-      <div className="p-4 hover:bg-slate-50 rounded-lg transition-colors">
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-600">
-            <span className="text-lg">{icon}</span>
-          </div>
-          <div className="flex-1">
-            <p className="text-sm text-slate-500 font-medium">{title}</p>
-            <p className="text-xl font-bold text-slate-900 mt-1">{value}</p>
-            {trend && (
-              <div className="flex items-center gap-2 mt-2">
-                <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                  trend.positive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
-                }`}>
-                  {trend.positive ? '↑' : '↓'} {trend.value}
-                </span>
-                <span className="text-xs text-slate-500">vs last period</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}}
+}

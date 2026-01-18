@@ -23,6 +23,7 @@ export default function TransactionsPage() {
   const currentYear = new Date().getFullYear();
 
   const yearFromUrl = Number(searchParams.get("year"));
+  
   const selectedYear =
     yearFromUrl && yearFromUrl >= START_YEAR
       ? yearFromUrl
@@ -219,6 +220,7 @@ useEffect(() => {
     return true;
   });
 
+console.log("PRINT PAGE LOADED")
 
  return (
   <div className="w-full">
@@ -292,11 +294,17 @@ useEffect(() => {
           </div>
 
           <button
-            onClick={() => window.print()}
-            className="px-4 py-2 rounded-lg bg-slate-700 text-white font-medium hover:bg-slate-800 shadow"
-          >
-            🖨️ Print
-          </button>
+  onClick={() => {
+    const url = `/transaction/print?year=${selectedYear}&type=${exportType}`
+    window.open(url, "_blank", "width=900,height=650")
+  }}
+  className="px-4 py-2 rounded-lg bg-slate-700 text-white font-medium hover:bg-slate-800 shadow"
+>
+  🖨️ Print
+</button>
+
+
+
         </div>
       </div>
 

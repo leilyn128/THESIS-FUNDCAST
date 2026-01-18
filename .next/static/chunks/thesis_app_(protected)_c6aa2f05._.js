@@ -2165,11 +2165,12 @@ function ExpensesPage() {
                                             className: "relative flex-grow",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+                                                    className: "absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-medium",
+                                                    children: "₱"
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
                                                     lineNumber: 443,
-                                                    columnNumber: 15
+                                                    columnNumber: 3
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                     type: "number",
@@ -2177,11 +2178,11 @@ function ExpensesPage() {
                                                     value: totalBudget,
                                                     onChange: (e)=>setTotalBudget(e.target.value),
                                                     disabled: isBudgetSaved,
-                                                    className: "w-full sm:w-64 rounded-lg px-4 py-2 text-sm border text-slate-900\n    ".concat(isBudgetSaved ? "bg-slate-100 cursor-not-allowed text-slate-500" : "bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20")
+                                                    className: "w-full sm:w-64 rounded-lg pl-8 pr-4 py-2 text-sm border text-slate-900\n      ".concat(isBudgetSaved ? "bg-slate-100 cursor-not-allowed text-slate-500" : "bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20")
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                                    lineNumber: 444,
-                                                    columnNumber: 15
+                                                    lineNumber: 447,
+                                                    columnNumber: 3
                                                 }, this)
                                             ]
                                         }, void 0, true, {
@@ -2195,7 +2196,7 @@ function ExpensesPage() {
                                             children: "Save"
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                            lineNumber: 460,
+                                            lineNumber: 463,
                                             columnNumber: 3
                                         }, this)
                                     ]
@@ -2236,7 +2237,7 @@ function ExpensesPage() {
                                             children: "Upload Budget File"
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                            lineNumber: 482,
+                                            lineNumber: 485,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2244,13 +2245,13 @@ function ExpensesPage() {
                                             children: "Upload CSV or Excel files for bulk import"
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                            lineNumber: 485,
+                                            lineNumber: 488,
                                             columnNumber: 11
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                    lineNumber: 481,
+                                    lineNumber: 484,
                                     columnNumber: 9
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2259,13 +2260,13 @@ function ExpensesPage() {
                                     children: "✕"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                    lineNumber: 489,
+                                    lineNumber: 492,
                                     columnNumber: 9
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                            lineNumber: 480,
+                            lineNumber: 483,
                             columnNumber: 7
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2280,23 +2281,23 @@ function ExpensesPage() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 499,
+                                lineNumber: 502,
                                 columnNumber: 9
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                            lineNumber: 498,
+                            lineNumber: 501,
                             columnNumber: 7
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                    lineNumber: 476,
+                    lineNumber: 479,
                     columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                lineNumber: 475,
+                lineNumber: 478,
                 columnNumber: 3
             }, this),
             showManualModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2314,7 +2315,7 @@ function ExpensesPage() {
                                             children: "Add Budget Entry"
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                            lineNumber: 520,
+                                            lineNumber: 523,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2322,13 +2323,13 @@ function ExpensesPage() {
                                             children: "Manually add a new budget allocation"
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                            lineNumber: 521,
+                                            lineNumber: 524,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                    lineNumber: 519,
+                                    lineNumber: 522,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2346,23 +2347,23 @@ function ExpensesPage() {
                                             d: "M6 18L18 6M6 6l12 12"
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                            lineNumber: 528,
+                                            lineNumber: 531,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                        lineNumber: 527,
+                                        lineNumber: 530,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                    lineNumber: 523,
+                                    lineNumber: 526,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                            lineNumber: 518,
+                            lineNumber: 521,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2377,23 +2378,23 @@ function ExpensesPage() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 533,
+                                lineNumber: 536,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                            lineNumber: 532,
+                            lineNumber: 535,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                    lineNumber: 517,
+                    lineNumber: 520,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                lineNumber: 516,
+                lineNumber: 519,
                 columnNumber: 9
             }, this),
             editOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2409,7 +2410,7 @@ function ExpensesPage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                            lineNumber: 549,
+                            lineNumber: 552,
                             columnNumber: 7
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2420,7 +2421,7 @@ function ExpensesPage() {
                             onChange: (e)=>setEditAmount(e.target.value)
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                            lineNumber: 553,
+                            lineNumber: 556,
                             columnNumber: 7
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2432,7 +2433,7 @@ function ExpensesPage() {
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                    lineNumber: 562,
+                                    lineNumber: 565,
                                     columnNumber: 9
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2441,24 +2442,24 @@ function ExpensesPage() {
                                     children: "Save"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                    lineNumber: 569,
+                                    lineNumber: 572,
                                     columnNumber: 9
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                            lineNumber: 561,
+                            lineNumber: 564,
                             columnNumber: 7
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                    lineNumber: 548,
+                    lineNumber: 551,
                     columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                lineNumber: 547,
+                lineNumber: 550,
                 columnNumber: 3
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2469,7 +2470,7 @@ function ExpensesPage() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {}, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 583,
+                                lineNumber: 586,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2481,13 +2482,13 @@ function ExpensesPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 585,
+                                lineNumber: 588,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                        lineNumber: 582,
+                        lineNumber: 585,
                         columnNumber: 9
                     }, this),
                     groupedBudgets.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2511,13 +2512,13 @@ function ExpensesPage() {
                                 items: g.items
                             }, g.category, false, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 620,
+                                lineNumber: 623,
                                 columnNumber: 9
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                        lineNumber: 612,
+                        lineNumber: 615,
                         columnNumber: 3
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "rounded-2xl border-2 border-dashed border-slate-200 bg-white p-12 text-center",
@@ -2529,12 +2530,12 @@ function ExpensesPage() {
                                     children: "📊"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                    lineNumber: 646,
+                                    lineNumber: 649,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 645,
+                                lineNumber: 648,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -2542,7 +2543,7 @@ function ExpensesPage() {
                                 children: "No Budget Data"
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 648,
+                                lineNumber: 651,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2550,7 +2551,7 @@ function ExpensesPage() {
                                 children: "Get started by uploading a file or adding a budget manually"
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 649,
+                                lineNumber: 652,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2562,7 +2563,7 @@ function ExpensesPage() {
                                         children: "Upload File"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                        lineNumber: 651,
+                                        lineNumber: 654,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2571,25 +2572,25 @@ function ExpensesPage() {
                                         children: "Add Budget"
                                     }, void 0, false, {
                                         fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                        lineNumber: 657,
+                                        lineNumber: 660,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                                lineNumber: 650,
+                                lineNumber: 653,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                        lineNumber: 644,
+                        lineNumber: 647,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/thesis/app/(protected)/expenses/page.jsx",
-                lineNumber: 581,
+                lineNumber: 584,
                 columnNumber: 7
             }, this)
         ]

@@ -516,6 +516,8 @@ function KPICards({ totals }) {
 "use strict";
 
 __turbopack_context__.s([
+    "categorizeIncome",
+    ()=>categorizeIncome,
     "default",
     ()=>IncomePieChart
 ]);
@@ -538,7 +540,6 @@ const incomeCOLORS = [
     "#f97316",
     "#ef4444"
 ];
-// --- AUTO CATEGORIZER FOR INCOME ---
 function categorizeIncome(description = "") {
     const t = description.toLowerCase();
     if (t.includes("clearance") || t.includes("certification")) {
@@ -610,33 +611,33 @@ function IncomePieChart({ transactions }) {
                                         fill: colorMap[item.name]
                                     }, item.name, false, {
                                         fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                                        lineNumber: 104,
+                                        lineNumber: 106,
                                         columnNumber: 17
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                                lineNumber: 94,
+                                lineNumber: 96,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Tooltip$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Tooltip"], {}, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                                lineNumber: 111,
+                                lineNumber: 113,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                        lineNumber: 93,
+                        lineNumber: 95,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                    lineNumber: 92,
+                    lineNumber: 94,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                lineNumber: 91,
+                lineNumber: 93,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -651,7 +652,7 @@ function IncomePieChart({ transactions }) {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                                lineNumber: 123,
+                                lineNumber: 125,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -659,24 +660,24 @@ function IncomePieChart({ transactions }) {
                                 children: item.name
                             }, void 0, false, {
                                 fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                                lineNumber: 127,
+                                lineNumber: 129,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, item.name, true, {
                         fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                        lineNumber: 119,
+                        lineNumber: 121,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-                lineNumber: 117,
+                lineNumber: 119,
                 columnNumber: 1
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/thesis/app/(protected)/dashboard/components/incomePieChart.jsx",
-        lineNumber: 88,
+        lineNumber: 90,
         columnNumber: 1
     }, this);
 }

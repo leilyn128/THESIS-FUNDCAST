@@ -27,7 +27,7 @@ const currency = function() {
     }).format(val);
 };
 function TransactionTable(param) {
-    let { transactions = [], loading, onEditTransaction, onDeleteTransaction } = param;
+    let { transactions = [], loading, onEditTransaction, onDeleteTransaction, hideActions = false } = param;
     _s();
     const [editingId, setEditingId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [rowForm, setRowForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
@@ -72,6 +72,25 @@ function TransactionTable(param) {
         let text = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : "";
         return text.toLowerCase().replace(/^\w/, (c)=>c.toUpperCase());
     };
+    {
+        !hideActions && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+            className: "px-4 py-2",
+            children: "Actions"
+        }, void 0, false, {
+            fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
+            lineNumber: 89,
+            columnNumber: 3
+        }, this);
+    }
+    {
+        !hideActions && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+            className: "px-4 py-2"
+        }, void 0, false, {
+            fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
+            lineNumber: 93,
+            columnNumber: 3
+        }, this);
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "print-root bg-white",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -94,7 +113,7 @@ function TransactionTable(param) {
                                                 children: "Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                lineNumber: 97,
+                                                lineNumber: 110,
                                                 columnNumber: 5
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -102,7 +121,7 @@ function TransactionTable(param) {
                                                 children: "Description"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                lineNumber: 98,
+                                                lineNumber: 111,
                                                 columnNumber: 5
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -110,7 +129,7 @@ function TransactionTable(param) {
                                                 children: "Income"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                lineNumber: 99,
+                                                lineNumber: 112,
                                                 columnNumber: 5
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -118,7 +137,7 @@ function TransactionTable(param) {
                                                 children: "Expenses"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                lineNumber: 100,
+                                                lineNumber: 113,
                                                 columnNumber: 5
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -126,7 +145,7 @@ function TransactionTable(param) {
                                                 children: "Balance"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                lineNumber: 101,
+                                                lineNumber: 114,
                                                 columnNumber: 5
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -134,18 +153,18 @@ function TransactionTable(param) {
                                                 children: "Actions"
                                             }, void 0, false, {
                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                lineNumber: 102,
+                                                lineNumber: 115,
                                                 columnNumber: 5
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                        lineNumber: 96,
+                                        lineNumber: 109,
                                         columnNumber: 3
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                    lineNumber: 95,
+                                    lineNumber: 108,
                                     columnNumber: 1
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -167,19 +186,19 @@ function TransactionTable(param) {
                                                         className: "border border-slate-300 rounded-md px-2 py-1 w-full text-sm font-normal"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 120,
+                                                        lineNumber: 133,
                                                         columnNumber: 13
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "font-medium",
                                                         children: t.date
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 129,
+                                                        lineNumber: 142,
                                                         columnNumber: 13
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                    lineNumber: 118,
+                                                    lineNumber: 131,
                                                     columnNumber: 9
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -193,19 +212,19 @@ function TransactionTable(param) {
                                                         className: "border border-slate-300 rounded-md px-2 py-1 w-full text-sm font-normal"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 138,
+                                                        lineNumber: 151,
                                                         columnNumber: 13
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "font-semibold tracking-wide font-variant-small-caps",
                                                         children: formatDescription(t.description)
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 146,
+                                                        lineNumber: 159,
                                                         columnNumber: 13
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 149,
                                                     columnNumber: 9
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -220,26 +239,26 @@ function TransactionTable(param) {
                                                         className: "border border-slate-300 rounded-md px-2 py-1 w-full text-right text-sm font-normal"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 155,
+                                                        lineNumber: 168,
                                                         columnNumber: 13
                                                     }, this) : t.deposit ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "text-emerald-700 font-semibold",
                                                         children: currency(t.deposit)
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 164,
+                                                        lineNumber: 177,
                                                         columnNumber: 13
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "text-slate-400",
                                                         children: "—"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 168,
+                                                        lineNumber: 181,
                                                         columnNumber: 13
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                    lineNumber: 153,
+                                                    lineNumber: 166,
                                                     columnNumber: 9
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -254,26 +273,26 @@ function TransactionTable(param) {
                                                         className: "border border-slate-300 rounded-md px-2 py-1 w-full text-right text-sm font-normal"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 175,
+                                                        lineNumber: 188,
                                                         columnNumber: 13
                                                     }, this) : t.withdrawal ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "text-rose-700 font-semibold",
                                                         children: currency(t.withdrawal)
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 184,
+                                                        lineNumber: 197,
                                                         columnNumber: 13
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "text-slate-400",
                                                         children: "—"
                                                     }, void 0, false, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 188,
+                                                        lineNumber: 201,
                                                         columnNumber: 13
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                    lineNumber: 173,
+                                                    lineNumber: 186,
                                                     columnNumber: 9
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -281,7 +300,7 @@ function TransactionTable(param) {
                                                     children: currency(t.balance)
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                    lineNumber: 193,
+                                                    lineNumber: 206,
                                                     columnNumber: 9
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -297,12 +316,12 @@ function TransactionTable(param) {
                                                                     className: "text-emerald-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                                    lineNumber: 205,
+                                                                    lineNumber: 218,
                                                                     columnNumber: 17
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                                lineNumber: 201,
+                                                                lineNumber: 214,
                                                                 columnNumber: 15
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -313,18 +332,18 @@ function TransactionTable(param) {
                                                                     className: "text-slate-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                                    lineNumber: 211,
+                                                                    lineNumber: 224,
                                                                     columnNumber: 17
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                                lineNumber: 207,
+                                                                lineNumber: 220,
                                                                 columnNumber: 15
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 200,
+                                                        lineNumber: 213,
                                                         columnNumber: 13
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "flex justify-center gap-2",
@@ -337,12 +356,12 @@ function TransactionTable(param) {
                                                                     className: "text-slate-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                                    lineNumber: 220,
+                                                                    lineNumber: 233,
                                                                     columnNumber: 17
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                                lineNumber: 216,
+                                                                lineNumber: 229,
                                                                 columnNumber: 15
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -353,41 +372,41 @@ function TransactionTable(param) {
                                                                     className: "text-rose-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                                    lineNumber: 226,
+                                                                    lineNumber: 239,
                                                                     columnNumber: 17
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                                lineNumber: 222,
+                                                                lineNumber: 235,
                                                                 columnNumber: 15
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                        lineNumber: 215,
+                                                        lineNumber: 228,
                                                         columnNumber: 13
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                                    lineNumber: 198,
+                                                    lineNumber: 211,
                                                     columnNumber: 9
                                                 }, this)
                                             ]
                                         }, t.id, true, {
                                             fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                            lineNumber: 112,
+                                            lineNumber: 125,
                                             columnNumber: 7
                                         }, this);
                                     })
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                                    lineNumber: 107,
+                                    lineNumber: 120,
                                     columnNumber: 1
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                            lineNumber: 93,
+                            lineNumber: 106,
                             columnNumber: 9
                         }, this),
                         loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -395,28 +414,28 @@ function TransactionTable(param) {
                             children: "Loading transactions…"
                         }, void 0, false, {
                             fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                            lineNumber: 241,
+                            lineNumber: 254,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                    lineNumber: 91,
+                    lineNumber: 104,
                     columnNumber: 7
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-                lineNumber: 90,
+                lineNumber: 103,
                 columnNumber: 5
             }, this)
         }, void 0, false, {
             fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-            lineNumber: 87,
+            lineNumber: 100,
             columnNumber: 5
         }, this)
     }, void 0, false, {
         fileName: "[project]/thesis/app/(protected)/transaction/components/transactionTable.jsx",
-        lineNumber: 86,
+        lineNumber: 99,
         columnNumber: 3
     }, this);
 }
@@ -910,6 +929,7 @@ function TransactionsPage() {
         if (exportType === "expense") return (t.withdrawal || 0) > 0;
         return true;
     });
+    console.log("PRINT PAGE LOADED");
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "w-full",
         children: [
@@ -931,13 +951,13 @@ function TransactionsPage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                    lineNumber: 241,
+                                    lineNumber: 243,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                            lineNumber: 239,
+                            lineNumber: 241,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -949,7 +969,7 @@ function TransactionsPage() {
                                     children: "➕ Add Transaction"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                    lineNumber: 248,
+                                    lineNumber: 250,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -965,7 +985,7 @@ function TransactionsPage() {
                                                     children: "All Transactions"
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                                    lineNumber: 273,
+                                                    lineNumber: 275,
                                                     columnNumber: 3
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -973,7 +993,7 @@ function TransactionsPage() {
                                                     children: "Income "
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                                    lineNumber: 274,
+                                                    lineNumber: 276,
                                                     columnNumber: 3
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -981,13 +1001,13 @@ function TransactionsPage() {
                                                     children: "Expenses "
                                                 }, void 0, false, {
                                                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                                    lineNumber: 275,
+                                                    lineNumber: 277,
                                                     columnNumber: 3
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                            lineNumber: 257,
+                                            lineNumber: 259,
                                             columnNumber: 12
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -997,39 +1017,42 @@ function TransactionsPage() {
                                             children: exportLoading ? "Exporting..." : "📤 Export"
                                         }, void 0, false, {
                                             fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                            lineNumber: 279,
+                                            lineNumber: 281,
                                             columnNumber: 13
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                    lineNumber: 256,
+                                    lineNumber: 258,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: ()=>window.print(),
+                                    onClick: ()=>{
+                                        const url = "/transaction/print?year=".concat(selectedYear, "&type=").concat(exportType);
+                                        window.open(url, "_blank", "width=900,height=650");
+                                    },
                                     className: "px-4 py-2 rounded-lg bg-slate-700 text-white font-medium hover:bg-slate-800 shadow",
                                     children: "🖨️ Print"
                                 }, void 0, false, {
                                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                                    lineNumber: 294,
+                                    lineNumber: 296,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                            lineNumber: 247,
+                            lineNumber: 249,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                    lineNumber: 238,
+                    lineNumber: 240,
                     columnNumber: 7
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                lineNumber: 227,
+                lineNumber: 229,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1043,12 +1066,12 @@ function TransactionsPage() {
                     onEditTransaction: handleEditTransaction
                 }, void 0, false, {
                     fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                    lineNumber: 308,
+                    lineNumber: 316,
                     columnNumber: 7
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                lineNumber: 307,
+                lineNumber: 315,
                 columnNumber: 5
             }, this),
             showAddModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$thesis$2f$app$2f28$protected$292f$transaction$2f$components$2f$transactionModal$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1056,13 +1079,13 @@ function TransactionsPage() {
                 onSubmit: handleAddTransaction
             }, void 0, false, {
                 fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-                lineNumber: 321,
+                lineNumber: 329,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/thesis/app/(protected)/transaction/page.jsx",
-        lineNumber: 224,
+        lineNumber: 226,
         columnNumber: 3
     }, this);
 }
